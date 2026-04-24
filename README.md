@@ -1,105 +1,122 @@
 <h1 align="center">Hi 👋, I'm Rohit Kumar</h1>
-<h3 align="center">Web Developer | 5+ Years Experience | Transitioning to Full Stack (MERN)</h3>
+
+<h3 align="center">
+  💻 Web Developer | 5+ Years Experience  
+  <br/>
+  🚀 Transitioning into Full Stack (MERN)
+</h3>
 
 <p align="center">
-  <a href="https://twitter.com/rohitkrdevs" target="blank">
-    <img src="https://img.shields.io/twitter/follow/rohitkrdevs?logo=twitter&style=for-the-badge" alt="rohitkrdevs" />
+  <img src="https://readme-typing-svg.herokuapp.com?color=0AFFEF&center=true&vCenter=true&lines=5%2B+Years+Web+Development+Experience;PHP+%7C+WordPress+%7C+MySQL;Learning+MERN+Stack;Building+Scalable+Web+Apps" />
+</p>
+
+<p align="center">
+  <a href="https://twitter.com/rohitkrdevs">
+    <img src="https://img.shields.io/twitter/follow/rohitkrdevs?logo=twitter&style=for-the-badge" />
+  </a>
+  <a href="https://in.linkedin.com/in/rohitkrdevs">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin" />
   </a>
 </p>
 
 ---
 
-### 👨‍💻 About Me
+## 👨‍💻 About Me
 
-- 💼 Web Developer with **5+ years of experience** building real-world web solutions  
-- 🌍 Based in **Ranchi, Jharkhand, India**  
-- 🧩 Worked across **Healthcare, Media, and Research domains**  
-- ⚡ Focused on **performance, scalability, and clean UI/UX**
+- 💼 5+ years experience in **real-world web development**
+- 🌍 Based in **Ranchi, Jharkhand, India**
+- 🧩 Experience across **Healthcare, Media & Research**
+- ⚡ Focused on **Performance • Scalability • Clean UI**
 
 ---
 
-### 🔭 Current Work
+## 🚀 Current Focus
 
-- 🔭 Working on transitioning to **Full Stack Development (MERN Stack)**
+- 🔭 Working on **MERN Stack Projects**
 - 🌱 Learning **React, Next.js, Node.js, Express, MongoDB**
-- 🧠 Improving **JavaScript fundamentals & system design**
+- 🧠 Improving **JavaScript & Application Architecture**
 
 ---
 
-### 🛠️ Tech Stack
+## 🛠️ Tech Stack
 
-#### 💻 Core Skills
-<p>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/wordpress/wordpress-original.svg" width="40" />
+### 💻 Core Technologies
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=html,css,js,php,mysql,wordpress" />
 </p>
 
-#### 🚀 Currently Exploring (MERN)
-<p>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" width="40" />
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" width="40" />
+### 🚀 MERN (Learning)
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=mongodb,express,react,nodejs,nextjs" />
 </p>
 
 ---
 
-### ⚙️ What I Do
+## ⚙️ What I Do
 
-- ✅ Build responsive websites using **HTML, CSS, JavaScript**
-- ✅ Develop dynamic apps using **PHP & MySQL**
-- ✅ Customize and manage **WordPress websites**
-- ✅ Improve **SEO, performance & user experience**
-- ✅ Handle **cPanel, hosting, domains, databases**
-- ✅ Integrate **payment gateways (Razorpay, Stripe)**
-
----
-
-### 🧰 Tools & Technologies
-
-<p>
-  <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" width="40"/>
-  <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" width="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" width="40"/>
-  <img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" width="40"/>
+<p align="center">
+  <img src="https://img.shields.io/badge/Responsive_Design-✔️-green?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/PHP_Development-✔️-blue?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/WordPress-✔️-purple?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/SEO_Optimization-✔️-orange?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Payment_Integration-✔️-red?style=for-the-badge"/>
 </p>
 
 ---
 
-### 🎨 Designing Tools
+## 🧰 Tools & Platforms
 
-<p>
-  <img src="https://www.vectorlogo.zone/logos/figma/figma-icon.svg" width="40"/>
-  <img src="https://www.vectorlogo.zone/logos/adobe_illustrator/adobe_illustrator-icon.svg" width="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/photoshop/photoshop-line.svg" width="40"/>
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=git,github,postman,bootstrap,tailwind,vscode" />
 </p>
 
 ---
 
-### 🌐 Portfolio & Links
+## 🎨 Design Tools
 
-- 👨‍💻 Projects: https://linktr.ee/rohitkrdevs  
-- 📄 LinkedIn: https://in.linkedin.com/in/rohitkrdevs  
-- 📧 Email: rohitkrdevs@gmail.com  
-
----
-
-### 🤝 Connect With Me
-
-<p align="left">
-<a href="https://twitter.com/rohitkrdevs" target="blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" height="30" width="40" /></a>
-<a href="https://linkedin.com/in/rohitkrdevs" target="blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" height="30" width="40" /></a>
-<a href="https://instagram.com/rohitkrdevs" target="blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" height="30" width="40" /></a>
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=figma,photoshop,illustrator" />
 </p>
 
 ---
 
-### 🎯 Goal
+## 📊 GitHub Stats
 
-> To become a highly skilled **Full Stack Developer** and build scalable, real-world applications using modern technologies.
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=rohitkrdevs&show_icons=true&theme=tokyonight" />
+</p>
+
+<p align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=rohitkrdevs&theme=tokyonight" />
+</p>
 
 ---
+
+## 🌐 Portfolio & Contact
+
+<p align="center">
+  <a href="https://linktr.ee/rohitkrdevs">
+    <img src="https://img.shields.io/badge/Portfolio-Visit-black?style=for-the-badge&logo=web" />
+  </a>
+  <a href="mailto:rohitkrdevs@gmail.com">
+    <img src="https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail" />
+  </a>
+</p>
+
+---
+
+## 🤝 Connect With Me
+
+<p align="center">
+<a href="https://twitter.com/rohitkrdevs"><img src="https://skillicons.dev/icons?i=twitter" height="40"/></a>
+<a href="https://linkedin.com/in/rohitkrdevs"><img src="https://skillicons.dev/icons?i=linkedin" height="40"/></a>
+<a href="https://instagram.com/rohitkrdevs"><img src="https://skillicons.dev/icons?i=instagram" height="40"/></a>
+</p>
+
+---
+
+## 🎯 Goal
+
+<p align="center">
+  Become a highly skilled <b>Full Stack Developer</b> and build scalable, real-world applications 🚀
+</p>
