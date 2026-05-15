@@ -1704,3 +1704,121 @@
 .dark .contact-btn:hover {
 	background: rgba(14, 165, 233, 0.3);
 }
+/* =========================================
+   CERTIFICATIONS
+========================================= */
+
+/* HEADING */
+.cert-heading {
+	font-size: 1.75rem;
+	font-weight: 800;
+	margin-bottom: 2rem; /* reduced for consistency */
+	color: rgb(15 23 42);
+}
+
+.dark .cert-heading {
+	color: white;
+}
+
+/* GRID */
+.cert-grid {
+	display: grid;
+	gap: 1.25rem; /* consistent with skills/projects */
+}
+
+/* CARD */
+.cert-card {
+	padding: 1.5rem;
+	border-radius: 0.75rem; /* md */
+	border: 1px solid rgb(226 232 240);
+	background: rgba(255, 255, 255, 0.85);
+	backdrop-filter: blur(10px);
+
+	transition: all 0.25s ease;
+}
+
+.cert-card:hover {
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* DARK */
+.dark .cert-card {
+	background: rgba(255, 255, 255, 0.04);
+	border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* TOP ROW */
+.cert-top {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 0.5rem; /* tighter alignment */
+}
+
+/* ICON */
+.cert-icon {
+	width: 42px;
+	height: 42px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	border-radius: 0.75rem;
+	background: rgb(241 245 249);
+	border: 1px solid rgb(226 232 240);
+}
+
+.dark .cert-icon {
+	background: rgba(255, 255, 255, 0.06);
+	border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* TEXT */
+.cert-title {
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: rgb(15 23 42);
+}
+
+.dark .cert-title {
+	color: white;
+}
+
+.cert-issuer {
+	font-size: 0.8rem;
+	color: rgb(100 116 139);
+}
+
+.dark .cert-issuer {
+	color: rgb(148 163 184);
+}
+
+.cert-desc {
+	margin-top: 0.5rem;
+	font-size: 0.9rem;
+	line-height: 1.6;
+	color: rgb(71 85 105);
+}
+
+.dark .cert-desc {
+	color: rgb(203 213 225);
+}
+
+/* LINK */
+.cert-link {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: rgb(14 165 233);
+	transition: 0.2s;
+}
+
+.cert-link:hover {
+	color: rgb(2 132 199);
+}
+
+/* RESPONSIVE */
+@media (min-width: 768px) {
+	.cert-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}

@@ -2,7 +2,15 @@
 
 import { useEffect, useRef, useState, useMemo } from "react";
 import ThemeToggle from "./ThemeToggle";
-import { Home, User, Briefcase, Code2, FolderGit2, Mail } from "lucide-react";
+import {
+	Home,
+	User,
+	Briefcase,
+	Code2,
+	FolderGit2,
+	Mail,
+	Award,
+} from "lucide-react";
 
 import gsap from "gsap";
 
@@ -17,6 +25,7 @@ export default function Navbar() {
 			{ name: "Experience", icon: Briefcase, href: "#experience" },
 			{ name: "Skills", icon: Code2, href: "#skills" },
 			{ name: "Projects", icon: FolderGit2, href: "#projects" },
+			{ name: "Certifications", icon: Award, href: "#certifications" },
 			{ name: "Contact", icon: Mail, href: "#contact" },
 		],
 		[],
@@ -72,7 +81,7 @@ export default function Navbar() {
 
 	// shared styles
 	const baseItem =
-		"group relative nav-item flex items-center justify-center w-12 h-12 md:w-14 md:h-14 aspect-square rounded-full transition-all duration-300 ease-out";
+		"group relative nav-item flex items-center justify-center w-10 h-10 md:w-14 md:h-14 aspect-square rounded-full transition-all duration-300 ease-out";
 
 	const activeItem = "bg-[var(--fg)] text-[var(--bg)] shadow-md scale-105";
 
@@ -86,9 +95,9 @@ export default function Navbar() {
 				w-full sm:w-auto
 				max-w-6xl
 				flex items-center justify-center
-				gap-2 sm:gap-3
+				gap-1.5 sm:gap-3
 				px-2 sm:px-4
-				py-2 sm:py-3
+				py-1.5 sm:py-3
 				rounded-full
 				backdrop-blur-xl
 				border border-foreground/10
@@ -134,7 +143,7 @@ export default function Navbar() {
 				})}
 
 				{/* DIVIDER (FIXED VISIBILITY) */}
-				<div className="w-px h-8 bg-(--fg)/60 mx-2" />
+				<div className="w-px h-6 sm:h-8 bg-(--fg)/60 mx-1.5 sm:mx-2" />
 
 				{/* THEME TOGGLE */}
 				<ThemeToggle />
