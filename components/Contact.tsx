@@ -85,7 +85,7 @@ export default function Contact() {
 	};
 
 	return (
-		<section id="contact" className="contact-section scroll-mt-32 relative">
+		<div id="contact" className="contact-section relative">
 			{/* TOAST */}
 			{toast.message && (
 				<motion.div
@@ -101,7 +101,7 @@ export default function Contact() {
 				</motion.div>
 			)}
 
-			<div className="container">
+			<div className="container  pb-0 md:pb-20">
 				{/* HEADER */}
 				<motion.div
 					className="contact-header"
@@ -165,6 +165,6 @@ export default function Contact() {
 					</motion.div>
 				</motion.form>
 			</div>
-		</section>
+		</div>
 	);
 }

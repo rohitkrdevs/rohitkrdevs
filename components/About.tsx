@@ -28,7 +28,7 @@ const stats = [
 
 export default function About() {
 	return (
-		<section className="relative overflow-hidden mb-20">
+		<div className="relative overflow-hidden mb-2">
 			<div className="container">
 				<div
 					className="
@@ -336,6 +336,6 @@ export default function About() {
 					</div>
 				</div>
 			</div>
-		</section>
+		</div>
 	);
 }

@@ -181,6 +181,16 @@
 	   LAYOUT
 	========================= */
 
+	section[id] {
+		scroll-margin-top: 8rem;
+	}
+
+	@media (max-width: 768px) {
+		section[id] {
+			scroll-margin-top: 7rem;
+		}
+	}
+
 	.container {
 		width: 100%;
 		max-width: var(--container);
@@ -188,26 +198,74 @@
 		padding-inline: 1.5rem;
 	}
 
+	/* =========================================
+	SECTION SPACING
+	========================================= */
+
+	.section {
+		margin-bottom: 6rem;
+	}
+
+	main > section:last-child {
+		margin-bottom: 0;
+	}
+
+	/* remove extra internal spacing */
 	section {
 		position: relative;
-		padding-block: var(--section-padding);
+		padding-block: 0;
 	}
 
-	.section-sm {
-		padding-block: 4rem;
+	/* =========================================
+	TABLET
+	========================================= */
+
+	@media (max-width: 1024px) {
+		.section {
+			margin-bottom: 4rem;
+		}
 	}
+
+	/* =========================================
+	MOBILE
+	========================================= */
+
+	@media (max-width: 768px) {
+		.container {
+			padding-inline: 1rem;
+		}
+
+		.section {
+			margin-bottom: 2.5rem;
+		}
+	}
+
+	/* =========================================
+	SMALL MOBILE
+	========================================= */
+
+	@media (max-width: 480px) {
+		.section {
+			margin-bottom: 2rem;
+		}
+	}
+
+	/* =========================================
+	SECTION HEADERS
+	========================================= */
 
 	.section-title {
-		margin-bottom: 3rem;
+		margin-bottom: 1.5rem;
 	}
 
 	.section-title h2 {
-		margin-bottom: 1rem;
+		margin-bottom: 0.75rem;
 	}
 
 	.section-title p {
 		max-width: 640px;
-		font-size: 1.05rem;
+		font-size: 1rem;
+		line-height: 1.7;
 	}
 
 	/* =========================
@@ -226,7 +284,14 @@
 
 		box-shadow: var(--shadow-md);
 	}
+	/* =========================
+	   NAVIGATION
+	========================= */
 
+	.nav-item {
+		aspect-ratio: 1 / 1;
+		border-radius: 9999px;
+	}
 	/* =========================
 	   CARD
 	========================= */
@@ -759,7 +824,7 @@
 
 .skills-section {
 	position: relative;
-	padding: 6rem 0;
+
 	overflow: hidden;
 }
 
@@ -1064,12 +1129,8 @@
 }
 
 @media (max-width: 640px) {
-	.skills-section {
-		padding: 5rem 0;
-	}
-
 	.skills-header {
-		margin-bottom: 3rem;
+		margin-bottom: 2rem;
 	}
 
 	.skills-grid {
@@ -1107,7 +1168,7 @@
 
 .projects-section {
 	position: relative;
-	padding: 6rem 0;
+
 	overflow: hidden;
 }
 
@@ -1157,13 +1218,20 @@
 ========================================= */
 
 .project-card {
-	flex: 0 0 380px;
+	flex: 0 0 auto;
+
+	width: 380px;
+	min-width: 280px;
+	max-width: 90vw;
+
+	flex-shrink: 0; /* 🔥 CRITICAL FIX */
+
 	scroll-snap-align: start;
 
-	display: flex; /* 🔥 REQUIRED */
-	flex-direction: column; /* 🔥 REQUIRED */
+	display: flex;
+	flex-direction: column;
 
-	height: 520px; /* 🔥 KEY: makes all cards equal */
+	height: 520px;
 
 	border-radius: var(--radius-md);
 	overflow: hidden;
@@ -1174,6 +1242,12 @@
 	transition:
 		transform 0.3s ease,
 		box-shadow 0.3s ease;
+}
+@media (max-width: 768px) {
+	.project-card {
+		width: 300px;
+		height: auto;
+	}
 }
 
 .project-card:hover {
@@ -1190,6 +1264,9 @@
 	flex-direction: column;
 	flex: 1;
 	padding: 1.25rem;
+	gap: 12px;
+	min-height: 0; /* 🔥 fixes mobile flex overflow bug */
+	box-sizing: border-box;
 }
 
 .project-footer {
@@ -1220,10 +1297,6 @@
 /* =========================================
    CONTENT
 ========================================= */
-
-.project-content {
-	padding: 1.25rem;
-}
 
 .project-title {
 	font-size: 1.15rem;
@@ -1436,7 +1509,7 @@
 
 .contact-section {
 	position: relative;
-	padding: 6rem 0;
+
 	overflow: hidden;
 }
 

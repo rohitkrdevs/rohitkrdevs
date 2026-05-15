@@ -7,12 +7,12 @@ import { Home, User, Briefcase, Code2, FolderGit2, Mail } from "lucide-react";
 import gsap from "gsap";
 
 export default function Navbar() {
-	const [active, setActive] = useState("#home");
+	const [active, setActive] = useState("#about");
 	const navRef = useRef<HTMLDivElement | null>(null);
 
 	const links = useMemo(
 		() => [
-			{ name: "Home", icon: Home, href: "#home" },
+			// { name: "Home", icon: Home, href: "#home" },
 			{ name: "About", icon: User, href: "#about" },
 			{ name: "Experience", icon: Briefcase, href: "#experience" },
 			{ name: "Skills", icon: Code2, href: "#skills" },
@@ -33,41 +33,53 @@ export default function Navbar() {
 		);
 	}, []);
 
-	// Scroll spy (stable)
+	// Scroll spy
 	useEffect(() => {
-		const sections = links
-			.map((l) => document.getElementById(l.href.replace("#", "")))
-			.filter(Boolean) as HTMLElement[];
+		const handleScroll = () => {
+			const scrollPosition = window.scrollY + window.innerHeight * 0.35;
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						setActive(`#${entry.target.id}`);
-					}
-				});
-			},
-			{
-				threshold: 0.6,
-				rootMargin: "-20% 0px -40% 0px",
-			},
-		);
+			let currentSection = "#about";
 
-		sections.forEach((sec) => observer.observe(sec));
+			for (const link of links) {
+				const section = document.getElementById(link.href.replace("#", ""));
 
-		return () => observer.disconnect();
+				if (!section) continue;
+
+				const sectionTop = section.offsetTop;
+				const sectionHeight = section.offsetHeight;
+
+				if (
+					scrollPosition >= sectionTop &&
+					scrollPosition < sectionTop + sectionHeight
+				) {
+					currentSection = link.href;
+				}
+			}
+
+			setActive(currentSection);
+		};
+
+		window.addEventListener("scroll", handleScroll, {
+			passive: true,
+		});
+
+		handleScroll();
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
 	}, [links]);
 
 	// shared styles
 	const baseItem =
-		"group relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all duration-300 ease-out";
+		"group relative nav-item flex items-center justify-center w-12 h-12 md:w-14 md:h-14 aspect-square rounded-full transition-all duration-300 ease-out";
 
-	const activeItem = "bg-[var(--fg)] text-[var(--bg)] scale-110 shadow-md";
+	const activeItem = "bg-[var(--fg)] text-[var(--bg)] shadow-md scale-105";
 
 	const inactiveItem = "hover:bg-foreground/10 hover:scale-110";
 
 	return (
-		<div className="fixed top-4 left-0 w-full z-50 flex justify-center px-4 pb-4">
+		<div className="fixed top-4 left-0 w-full z-50 flex justify-center px-8 pb-4">
 			<nav
 				ref={navRef}
 				className="
@@ -95,7 +107,7 @@ export default function Navbar() {
 							key={item.name}
 							href={item.href}
 							onClick={() => setActive(item.href)}
-							className={`${baseItem} ${isActive ? activeItem : inactiveItem}`}
+							className={`${baseItem} ${isActive ? activeItem : inactiveItem} shrink-0`}
 							aria-label={item.name}>
 							<Icon size={18} />
 

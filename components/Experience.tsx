@@ -70,9 +70,7 @@ export default function Experience() {
 	};
 
 	return (
-		<section
-			id="experience"
-			className="relative overflow-hidden py-24 sm:py-32 scroll-mt-32">
+		<div id="experience" className="relative overflow-hidden">
 			<div className="container relative z-10">
 				{/* HEADER */}
 				<motion.div
@@ -151,6 +149,6 @@ export default function Experience() {
 					))}
 				</motion.div>
 			</div>
-		</section>
+		</div>
 	);
 }

@@ -105,7 +105,7 @@ export default function Skills() {
 	};
 
 	return (
-		<section id="skills" className="skills-section scroll-mt-32">
+		<div id="skills" className="skills-section">
 			<div className="container relative z-10">
 				{/* HEADER */}
 				<motion.div
@@ -162,6 +162,6 @@ export default function Skills() {
 					))}
 				</motion.div>
 			</div>
-		</section>
+		</div>
 	);
 }

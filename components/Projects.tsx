@@ -198,7 +198,7 @@ export default function Projects() {
 	};
 
 	return (
-		<section id="projects" className="projects-section scroll-mt-32">
+		<div id="projects" className="projects-section">
 			<div className="container">
 				{/* HEADER */}
 				<motion.div
@@ -239,8 +239,7 @@ export default function Projects() {
 						<motion.article
 							key={project.title}
 							className="project-card"
-							variants={card}
-							whileHover={{ y: -8 }}>
+							variants={card}>
 							{/* IMAGE */}
 							<div className="project-image-wrapper">
 								<Image
@@ -283,6 +282,6 @@ export default function Projects() {
 					))}
 				</motion.div>
 			</div>
-		</section>
+		</div>
 	);
 }

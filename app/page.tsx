@@ -20,18 +20,13 @@ export default function Home() {
 			<Navbar />
 
 			{/* Main Content */}
-			<main className="relative z-10 lg:pt-20">
+			<main className="relative z-10 pt-28 md:pt-32">
 				{/* Hero / About */}
 				<section
 					id="about"
 					className="
 						container
-						min-h-screen
-						flex
-						items-center
-						justify-center
-						pt-28
-						pb-20
+						section					
 					">
 					<About />
 				</section>
@@ -72,7 +67,6 @@ export default function Home() {
 					className="
 						container
 						section
-						pb-28
 					">
 					<Contact />
 				</section>
