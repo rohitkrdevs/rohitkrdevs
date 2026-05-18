@@ -1,5 +1,8 @@
 type ChatRole = "user" | "assistant";
 
+export const runtime = "nodejs";
+export const maxDuration = 30;
+
 type ChatMessage = {
 	role: ChatRole;
 	content: string;
@@ -189,7 +192,6 @@ async function callGemini(
 		return await fetch(endpoint, {
 			method: "POST",
 			headers: {
-				Connection: "close",
 				"Content-Type": "application/json",
 				"x-goog-api-key": apiKey,
 			},

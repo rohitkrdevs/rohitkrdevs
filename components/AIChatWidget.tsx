@@ -45,7 +45,10 @@ function renderInlineMarkdown(text: string) {
 }
 
 function renderMessageContent(content: string) {
-	const normalizedContent = content.replace(/\s+([*-]\s+\*\*[^*]+:\*\*)/g, "\n$1");
+	const normalizedContent = content.replace(
+		/\s+([*-]\s+\*\*[^*]+:\*\*)/g,
+		"\n$1",
+	);
 	const lines = normalizedContent
 		.split(/\n+/)
 		.map((line) => line.trim())
@@ -83,7 +86,9 @@ function renderMessageContent(content: string) {
 		flushList();
 
 		blocks.push(
-			<p key={`paragraph-${blocks.length}`} className="my-1 first:mt-0 last:mb-0">
+			<p
+				key={`paragraph-${blocks.length}`}
+				className="my-1 first:mt-0 last:mb-0">
 				{renderInlineMarkdown(line)}
 			</p>,
 		);
@@ -133,9 +138,11 @@ export default function AIChatWidget() {
 			});
 
 			const data: unknown = await response.json().catch(() => null);
-			const payload = data as
-				| { reply?: unknown; error?: unknown; sources?: unknown }
-				| null;
+			const payload = data as {
+				reply?: unknown;
+				error?: unknown;
+				sources?: unknown;
+			} | null;
 
 			if (!response.ok) {
 				throw new Error(
@@ -196,9 +203,9 @@ export default function AIChatWidget() {
 						overflow-hidden
 						rounded-2xl
 						border
-						border-[color:var(--surface-border)]
-						bg-[var(--surface)]
-						text-[var(--fg)]
+						border-(--surface-border)
+						bg-(--surface)
+						text-(--fg)
 						shadow-2xl
 						backdrop-blur-xl
 					"
@@ -210,7 +217,7 @@ export default function AIChatWidget() {
 							justify-between
 							gap-3
 							border-b
-							border-[color:var(--surface-border)]
+							border-(--surface-border)
 							px-4
 							py-3
 						">
@@ -224,17 +231,17 @@ export default function AIChatWidget() {
 									items-center
 									justify-center
 									rounded-xl
-									bg-[var(--accent)]
+									bg-(--accent)
 									text-white
 								">
 								<Sparkles size={18} />
 							</div>
 
 							<div className="min-w-0">
-								<h2 className="truncate text-base font-bold tracking-normal text-[var(--fg)]">
+								<h2 className="truncate text-base font-bold tracking-normal text-(--fg)">
 									Ask Gemini AI
 								</h2>
-								<p className="truncate text-xs leading-5 text-[var(--muted)]">
+								<p className="truncate text-xs leading-5 text-(--muted)">
 									Profile + web answers
 								</p>
 							</div>
@@ -251,10 +258,10 @@ export default function AIChatWidget() {
 								items-center
 								justify-center
 								rounded-xl
-								text-[var(--muted)]
+								text-(--muted)
 								transition
-								hover:bg-[var(--secondary)]
-								hover:text-[var(--secondary-fg)]
+								hover:bg-(--secondary)
+								hover:text-(--secondary-fg)
 							"
 							aria-label="Close Gemini AI assistant">
 							<X size={18} />
@@ -280,8 +287,8 @@ export default function AIChatWidget() {
 													leading-6
 													${
 														isUser
-															? "bg-[var(--accent)] text-white"
-															: "border border-[color:var(--surface-border)] bg-[var(--secondary)] text-[var(--secondary-fg)]"
+															? "bg-(--accent)-white"
+															: "border border-(--surface-border) bg-(--secondary)-[var(--secondary-fg)]"
 													}
 												`}>
 												{isUser
@@ -289,35 +296,37 @@ export default function AIChatWidget() {
 													: renderMessageContent(message.content)}
 											</div>
 
-											{!isUser && message.sources && message.sources.length > 0 && (
-												<div className="mt-2 flex flex-wrap gap-2">
-													{message.sources.map((source) => (
-														<a
-															key={source.uri}
-															href={source.uri}
-															target="_blank"
-															rel="noopener noreferrer"
-															className="
+											{!isUser &&
+												message.sources &&
+												message.sources.length > 0 && (
+													<div className="mt-2 flex flex-wrap gap-2">
+														{message.sources.map((source) => (
+															<a
+																key={source.uri}
+																href={source.uri}
+																target="_blank"
+																rel="noopener noreferrer"
+																className="
 																max-w-full
 																truncate
 																rounded-full
 																border
-																border-[color:var(--surface-border)]
-																bg-[var(--surface)]
+																border-(--surface-border)
+																bg-(--surface)
 																px-3
 																py-1.5
 																text-xs
 																font-semibold
-																text-[var(--muted)]
+																text-(--muted)
 																transition
-																hover:border-[color:var(--accent)]
-																hover:text-[var(--accent)]
+																hover:border-(--accent)
+																hover:text-(--accent)
 															">
-															{source.title}
-														</a>
-													))}
-												</div>
-											)}
+																{source.title}
+															</a>
+														))}
+													</div>
+												)}
 										</div>
 									</div>
 								);
@@ -325,7 +334,7 @@ export default function AIChatWidget() {
 
 							{loading && (
 								<div className="flex justify-start">
-									<div className="flex items-center gap-2 rounded-2xl border border-[color:var(--surface-border)] bg-[var(--secondary)] px-4 py-3 text-sm text-[var(--muted)]">
+									<div className="flex items-center gap-2 rounded-2xl border border-(--surface-border) bg-(--secondary) py-3 text-sm text-(--muted)">
 										<Loader2 className="h-4 w-4 animate-spin" />
 										Thinking...
 									</div>
@@ -337,7 +346,7 @@ export default function AIChatWidget() {
 					</div>
 
 					{messages.length === 1 && (
-						<div className="border-t border-[color:var(--surface-border)] px-4 py-3">
+						<div className="border-t border-(--surface-border) px-4 py-3">
 							<div className="flex flex-wrap gap-2">
 								{suggestedQuestions.map((question) => (
 									<button
@@ -347,16 +356,16 @@ export default function AIChatWidget() {
 										className="
 											rounded-full
 											border
-											border-[color:var(--surface-border)]
+											border-(--surface-border)
 											px-3
 											py-2
 											text-left
 											text-xs
 											font-semibold
-											text-[var(--muted)]
+											text-(--muted)
 											transition
-											hover:border-[color:var(--accent)]
-											hover:text-[var(--accent)]
+											hover:border-(--accent)
+											hover:text-(--accent)
 										">
 										{question}
 									</button>
@@ -373,7 +382,7 @@ export default function AIChatWidget() {
 
 					<form
 						onSubmit={handleSubmit}
-						className="border-t border-[color:var(--surface-border)] p-3">
+						className="border-t border-(--surface-border) p-3">
 						<div className="flex items-end gap-2">
 							<textarea
 								value={input}
@@ -387,18 +396,18 @@ export default function AIChatWidget() {
 									resize-none
 									rounded-xl
 									border
-									border-[color:var(--surface-border)]
-									bg-[var(--secondary)]
+									border-(--surface-border)
+									bg-(--secondary)
 									px-3
 									py-2.5
 									text-sm
 									leading-6
-									text-[var(--secondary-fg)]
+									text-(--secondary-fg)
 									outline-none
 									transition
 									placeholder:text-slate-400
-									focus:border-[color:var(--accent)]
-									focus:bg-[var(--surface)]
+									focus:border-(--accent)
+									focus:bg-(--surface)
 									focus:ring-4
 									focus:ring-blue-500/10
 								"
@@ -415,7 +424,7 @@ export default function AIChatWidget() {
 									items-center
 									justify-center
 									rounded-xl
-									bg-[var(--accent)]
+									bg-(--accent)
 									text-white
 									shadow-lg
 									shadow-blue-500/20
@@ -448,7 +457,7 @@ export default function AIChatWidget() {
 					items-center
 					justify-center
 					rounded-2xl
-					bg-[var(--accent)]
+					bg-(--accent)
 					text-white
 					shadow-xl
 					shadow-blue-500/25
@@ -456,7 +465,9 @@ export default function AIChatWidget() {
 					hover:-translate-y-1
 					hover:brightness-110
 				"
-				aria-label={open ? "Hide Gemini AI assistant" : "Open Gemini AI assistant"}>
+				aria-label={
+					open ? "Hide Gemini AI assistant" : "Open Gemini AI assistant"
+				}>
 				<MessageCircle size={22} />
 			</button>
 		</div>
