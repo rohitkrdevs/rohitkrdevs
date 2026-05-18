@@ -7,6 +7,7 @@ import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import GoToTopButton from "@/components/GoToTopButton";
+import AIChatWidget from "@/components/AIChatWidget";
 
 export default function Home() {
 	return (
@@ -88,6 +89,9 @@ export default function Home() {
 
 			{/* Go To Top Button */}
 			<GoToTopButton />
+
+			{/* AI Assistant */}
+			<AIChatWidget />
 		</div>
 	);
 }

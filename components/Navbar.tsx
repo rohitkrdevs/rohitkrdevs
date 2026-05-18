@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import ThemeToggle from "./ThemeToggle";
 import {
-	Home,
 	User,
 	Briefcase,
 	Code2,
