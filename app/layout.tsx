@@ -1,3 +1,4 @@
+import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 
 import type { Metadata, Viewport } from "next";
@@ -22,6 +23,10 @@ const SITE_URL = "https://rohitkrdevs.vercel.app";
 
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
+
+	verification: {
+		google: "SiKCMl-802tJYeDi9UlMBtizNcnSGuTraVCQn7ZX4-8",
+	},
 
 	title: {
 		default: "Rohit Kumar | Web Developer in Ranchi",
@@ -190,6 +195,7 @@ export default function RootLayout({
 					/>
 				</ThemeProvider>
 			</body>
+			<GoogleTagManager gtmId="GTM-P2G6MFK8" />
 		</html>
 	);
 }
