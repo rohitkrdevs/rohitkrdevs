@@ -18,7 +18,7 @@ const spaceGrotesk = Space_Grotesk({
 	display: "swap",
 });
 
-const SITE_URL = "https://rohitkrdevs.github.io"; // 🔥 change this
+const SITE_URL = "https://rohitkrdevs.vercel.app";
 
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
