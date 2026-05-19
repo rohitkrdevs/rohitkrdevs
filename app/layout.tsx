@@ -29,15 +29,23 @@ export const metadata: Metadata = {
 	},
 
 	description:
-		"Modern Next.js portfolio showcasing projects, skills, experience, and contact information with clean UI and smooth animations.",
+		"Rohit Kumar is a web developer in Ranchi specializing in Next.js, React, Tailwind CSS, TypeScript, and modern full stack web applications.",
 
 	keywords: [
+		"Rohit Kumar Web Developer Ranchi",
 		"Rohit Kumar",
-		"Portfolio",
+		"Web Developer in Ranchi",
+		"Frontend Developer Ranchi",
+		"Next.js Developer Ranchi",
+		"React Developer Ranchi",
+		"Full Stack Developer Ranchi",
+		"Freelance Web Developer Ranchi",
+		"MERN Stack Developer",
 		"Next.js Developer",
 		"React Developer",
-		"Full Stack Developer",
-		"Frontend Engineer",
+		"TypeScript Developer",
+		"Tailwind CSS Developer",
+		"Portfolio Website",
 	],
 
 	authors: [{ name: "Rohit Kumar" }],
@@ -50,16 +58,16 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: "Rohit Kumar | Web Developer in Ranchi",
 		description:
-			"Modern portfolio built with Next.js, Tailwind CSS, and animations.",
+			"Rohit Kumar is a modern web developer in Ranchi building fast, responsive, and SEO optimized web applications using Next.js and React.",
 		url: SITE_URL,
 		siteName: "Rohit Portfolio",
 		type: "website",
 		images: [
 			{
-				url: "/assets/rohitkrdevs.jpg",
+				url: "https://rohitkrdevs.vercel.app/assets/rohitkrdevs.jpg",
 				width: 1200,
 				height: 630,
-				alt: "Rohit Portfolio Preview",
+				alt: "Rohit Kumar | Web Developer in Ranchi",
 			},
 		],
 	},
@@ -67,8 +75,9 @@ export const metadata: Metadata = {
 	twitter: {
 		card: "summary_large_image",
 		title: "Rohit Kumar | Web Developer in Ranchi",
-		description: "Modern portfolio built using Next.js and Tailwind CSS.",
-		images: ["/og-image.png"],
+		description:
+			"Rohit Kumar is a modern web developer in Ranchi building fast, responsive, and SEO optimized web applications using Next.js and React.",
+		images: ["https://rohitkrdevs.vercel.app/assets/rohitkrdevs.jpg"],
 	},
 
 	icons: {
@@ -91,11 +100,20 @@ export const metadata: Metadata = {
 		],
 	},
 
+	category: "technology",
+
 	manifest: "/assets/images/favicon_io/site.webmanifest",
 
 	robots: {
 		index: true,
 		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+			"max-video-preview": -1,
+			"max-image-preview": "large",
+			"max-snippet": -1,
+		},
 	},
 };
 
@@ -144,6 +162,32 @@ export default function RootLayout({
 						{/* Main Content */}
 						<main className="relative z-10">{children}</main>
 					</div>
+					<script
+						type="application/ld+json"
+						dangerouslySetInnerHTML={{
+							__html: JSON.stringify({
+								"@context": "https://schema.org",
+								"@type": "Person",
+								name: "Rohit Kumar",
+								url: "https://rohitkrdevs.vercel.app",
+								jobTitle: "Web Developer in Ranchi",
+								sameAs: [
+									"https://github.com/rohitkrdevs",
+									"https://linkedin.com/in/rohitkrdevs",
+									"https://instagram.com/rohitkrdevs",
+									"https://facebook.com/rohitkrdevs",
+									"https://x.com/rohitkrdevs",
+								],
+								knowsAbout: [
+									"Next.js",
+									"React",
+									"TypeScript",
+									"Tailwind CSS",
+									"Full Stack Development",
+								],
+							}),
+						}}
+					/>
 				</ThemeProvider>
 			</body>
 		</html>
