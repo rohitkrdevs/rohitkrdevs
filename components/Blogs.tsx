@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ArrowUpRight, BookOpen, Calendar } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
@@ -20,22 +20,26 @@ export default function Blogs() {
 	const [posts, setPosts] = useState<BlogPost[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	// ⚡ Initialize Supabase client inside useMemo so it doesn't run during build/static-analysis
-	const supabase = useMemo(() => {
-		const url =
-			process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
-		const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key";
-		return createClient(url, key);
-	}, []);
-
 	useEffect(() => {
 		async function fetchAutomatedArticles() {
-			// Check if we are using the placeholder
-			if (process.env.NEXT_PUBLIC_SUPABASE_URL === undefined) {
-				setPosts([]);
+			// 1. Get environment variables safely inside the effect
+			const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+			const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+			// 2. Build-time/Missing Key Guard:
+			// If keys aren't present, we just return empty state and stop here.
+			if (
+				!supabaseUrl ||
+				!supabaseAnonKey ||
+				supabaseUrl.includes("placeholder")
+			) {
 				setLoading(false);
+				setPosts([]);
 				return;
 			}
+
+			// 3. Initialize ONLY when we are sure keys exist (Client-side runtime)
+			const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 			try {
 				const { data, error } = await supabase
@@ -47,14 +51,13 @@ export default function Blogs() {
 				if (error) throw error;
 				if (data) setPosts(data);
 			} catch {
-				// No parameters needed here since we are just setting an empty state
 				setPosts([]);
 			} finally {
 				setLoading(false);
 			}
 		}
 		fetchAutomatedArticles();
-	}, [supabase]);
+	}, []);
 
 	const containerVariants: Variants = {
 		hidden: { opacity: 0 },
