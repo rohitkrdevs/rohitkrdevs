@@ -4,12 +4,16 @@ import React, { useEffect, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ArrowUpRight, BookOpen, Calendar } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
-import Image from "next/image"; // 👈 Integrated high-performance Next.js Optimizer
+import Image from "next/image";
 
-const supabase = createClient(
-	process.env.NEXT_PUBLIC_SUPABASE_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-);
+// ⚡ Dynamic build fallbacks shield the client initialization block from crashing on empty worker scopes
+const supabaseUrl =
+	process.env.NEXT_PUBLIC_SUPABASE_URL ||
+	"https://placeholder-project.supabase.co";
+const supabaseAnonKey =
+	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-token";
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface BlogPost {
 	id: number;
@@ -27,6 +31,13 @@ export default function Blogs() {
 
 	useEffect(() => {
 		async function fetchAutomatedArticles() {
+			// 🛑 Cancel data fetching entirely if actual live environment variables aren't injected yet
+			if (supabaseUrl.includes("placeholder-project")) {
+				setPosts([]);
+				setLoading(false);
+				return;
+			}
+
 			try {
 				const { data, error } = await supabase
 					.from("blogs")
@@ -36,9 +47,8 @@ export default function Blogs() {
 
 				if (error) throw error;
 				if (data) setPosts(data);
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			} catch (err) {
-				// Production-safe state fallback: simply clear out posts if the connection fails
+				// Production-safe state fallback: clears articles if connection fails or table doesn't exist yet
 				setPosts([]);
 			} finally {
 				setLoading(false);
@@ -126,9 +136,8 @@ export default function Blogs() {
 								key={post.id}
 								variants={cardVariants}
 								whileHover={{ y: -6 }}
-								className="blog-card">
+								className="blog-card group">
 								<div className="relative z-10 flex flex-col h-full">
-									{/* ⚡ Next.js Image Element wrapper replacing standard raw unoptimized img tags */}
 									<div className="w-full h-48 rounded-xl overflow-hidden mb-4 border border-foreground/5 bg-muted/20 relative">
 										<Image
 											src={post.image_url}
@@ -154,7 +163,7 @@ export default function Blogs() {
 									<h4 className="blog-card-title">
 										<a
 											href={`/blog/${post.slug}`}
-											className="focus:outline-none">
+											className="focus:outline-none hover:text-blue-500 transition-colors">
 											{post.title}
 										</a>
 									</h4>
