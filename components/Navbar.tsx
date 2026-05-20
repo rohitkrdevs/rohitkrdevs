@@ -85,7 +85,7 @@ export default function Navbar() {
 	}, [links]);
 
 	const baseItem =
-		"group relative nav-item flex items-center justify-center w-11 h-11 md:w-16 md:h-16 aspect-square rounded-full transition-all duration-300 ease-out";
+		"group relative nav-item flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 aspect-square rounded-full transition-all duration-300 ease-out";
 
 	const activeItem = "bg-[var(--fg)] text-[var(--bg)] shadow-md scale-105";
 	const inactiveItem = "hover:bg-foreground/10 hover:scale-110";
@@ -100,16 +100,16 @@ export default function Navbar() {
 				flex
 				items-center
 				justify-center
-				gap-1.5 sm:gap-3
-				px-1.5 sm:px-3
-				py-1.5 sm:py-3
+				gap-2 sm:gap-3
+				px-3 sm:px-4    {/* Increased padding for mobile buffer */}
+				py-2 sm:py-3    {/* Increased vertical padding to match */}
 				rounded-full
 				backdrop-blur-xl
 				border border-foreground/10
 				bg-background/70
 				text-foreground
 				shadow-lg
-				overflow-hidden
+				/* Removed overflow-hidden to allow subtle item shadows/scales to breathe */
 			">
 				{/* MENU ITEMS */}
 				{links.map((item) => {

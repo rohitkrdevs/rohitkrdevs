@@ -37,9 +37,8 @@ export default function ThemeToggle() {
 			aria-label="Toggle theme mode"
 			className="
                 fixed 
-                right-4 
-                top-1/2 
-                -translate-y-1/2 
+               	left-4 
+				bottom-20
                 z-50 
                 p-3 
                 rounded-xl 

@@ -194,46 +194,46 @@ export default function AIChatWidget() {
 			{open && (
 				<section
 					className="
-						mb-4
-						flex
-						h-[min(620px,calc(100vh-8rem))]
-						w-[calc(100vw-2rem)]
-						max-w-97.5
-						flex-col
-						overflow-hidden
-						rounded-2xl
-						border
-						border-(--surface-border)
-						bg-(--surface)
-						text-(--fg)
-						shadow-2xl
-						backdrop-blur-xl
-					"
+                        mb-4
+                        flex
+                        h-[min(620px,calc(100vh-8rem))]
+                        w-[calc(100vw-2rem)]
+                        max-w-97.5
+                        flex-col
+                        overflow-hidden
+                        rounded-2xl
+                        border
+                        border-(--surface-border)
+                        bg-(--surface)
+                        text-(--fg)
+                        shadow-2xl
+                        backdrop-blur-xl
+                    "
 					aria-label="Gemini AI assistant">
 					<header
 						className="
-							flex
-							items-center
-							justify-between
-							gap-3
-							border-b
-							border-(--surface-border)
-							px-4
-							py-3
-						">
+                            flex
+                            items-center
+                            justify-between
+                            gap-3
+                            border-b
+                            border-(--surface-border)
+                            px-4
+                            py-3
+                        ">
 						<div className="flex min-w-0 items-center gap-3">
 							<div
 								className="
-									flex
-									h-10
-									w-10
-									shrink-0
-									items-center
-									justify-center
-									rounded-xl
-									bg-(--accent)
-									text-white
-								">
+                                    flex
+                                    h-10
+                                    w-10
+                                    shrink-0
+                                    items-center
+                                    justify-center
+                                    rounded-xl
+                                    bg-(--accent)
+                                    text-white
+                                ">
 								<Sparkles size={18} />
 							</div>
 
@@ -251,18 +251,18 @@ export default function AIChatWidget() {
 							type="button"
 							onClick={() => setOpen(false)}
 							className="
-								flex
-								h-9
-								w-9
-								shrink-0
-								items-center
-								justify-center
-								rounded-xl
-								text-(--muted)
-								transition
-								hover:bg-(--secondary)
-								hover:text-(--secondary-fg)
-							"
+                                flex
+                                h-9
+                                w-9
+                                shrink-0
+                                items-center
+                                justify-center
+                                rounded-xl
+                                text-(--muted)
+                                transition
+                                hover:bg-(--secondary)
+                                hover:text-(--secondary-fg)
+                            "
 							aria-label="Close Gemini AI assistant">
 							<X size={18} />
 						</button>
@@ -280,17 +280,17 @@ export default function AIChatWidget() {
 										<div className="max-w-[84%]">
 											<div
 												className={`
-													rounded-2xl
-													px-4
-													py-3
-													text-sm
-													leading-6
-													${
-														isUser
-															? "bg-(--accent)-white"
-															: "border border-(--surface-border) bg-(--secondary)-[var(--secondary-fg)]"
-													}
-												`}>
+                                                    rounded-2xl
+                                                    px-4
+                                                    py-3
+                                                    text-sm
+                                                    leading-6
+                                                    ${
+																											isUser
+																												? "bg-(--accent)-white"
+																												: "border border-(--surface-border) bg-(--secondary)-[var(--secondary-fg)]"
+																										}
+                                                `}>
 												{isUser
 													? message.content
 													: renderMessageContent(message.content)}
@@ -307,21 +307,21 @@ export default function AIChatWidget() {
 																target="_blank"
 																rel="noopener noreferrer"
 																className="
-																max-w-full
-																truncate
-																rounded-full
-																border
-																border-(--surface-border)
-																bg-(--surface)
-																px-3
-																py-1.5
-																text-xs
-																font-semibold
-																text-(--muted)
-																transition
-																hover:border-(--accent)
-																hover:text-(--accent)
-															">
+                                                                max-w-full
+                                                                truncate
+                                                                rounded-full
+                                                                border
+                                                                border-(--surface-border)
+                                                                bg-(--surface)
+                                                                px-3
+                                                                py-1.5
+                                                                text-xs
+                                                                font-semibold
+                                                                text-(--muted)
+                                                                transition
+                                                                hover:border-(--accent)
+                                                                hover:text-(--accent)
+                                                            ">
 																{source.title}
 															</a>
 														))}
@@ -354,19 +354,19 @@ export default function AIChatWidget() {
 										type="button"
 										onClick={() => void askGemini(question)}
 										className="
-											rounded-full
-											border
-											border-(--surface-border)
-											px-3
-											py-2
-											text-left
-											text-xs
-											font-semibold
-											text-(--muted)
-											transition
-											hover:border-(--accent)
-											hover:text-(--accent)
-										">
+                                            rounded-full
+                                            border
+                                            border-(--surface-border)
+                                            px-3
+                                            py-2
+                                            text-left
+                                            text-xs
+                                            font-semibold
+                                            text-(--muted)
+                                            transition
+                                            hover:border-(--accent)
+                                            hover:text-(--accent)
+                                        ">
 										{question}
 									</button>
 								))}
@@ -390,51 +390,51 @@ export default function AIChatWidget() {
 								rows={1}
 								placeholder="Ask anything..."
 								className="
-									max-h-28
-									min-h-11
-									flex-1
-									resize-none
-									rounded-xl
-									border
-									border-(--surface-border)
-									bg-(--secondary)
-									px-3
-									py-2.5
-									text-sm
-									leading-6
-									text-(--secondary-fg)
-									outline-none
-									transition
-									placeholder:text-slate-400
-									focus:border-(--accent)
-									focus:bg-(--surface)
-									focus:ring-4
-									focus:ring-blue-500/10
-								"
+                                    max-h-28
+                                    min-h-11
+                                    flex-1
+                                    resize-none
+                                    rounded-xl
+                                    border
+                                    border-(--surface-border)
+                                    bg-(--secondary)
+                                    px-3
+                                    py-2.5
+                                    text-sm
+                                    leading-6
+                                    text-(--secondary-fg)
+                                    outline-none
+                                    transition
+                                    placeholder:text-slate-400
+                                    focus:border-(--accent)
+                                    focus:bg-(--surface)
+                                    focus:ring-4
+                                    focus:ring-blue-500/10
+                                "
 							/>
 
 							<button
 								type="submit"
 								disabled={loading || input.trim().length === 0}
 								className="
-									flex
-									h-11
-									w-11
-									shrink-0
-									items-center
-									justify-center
-									rounded-xl
-									bg-(--accent)
-									text-white
-									shadow-lg
-									shadow-blue-500/20
-									transition
-									hover:-translate-y-0.5
-									hover:brightness-110
-									disabled:cursor-not-allowed
-									disabled:opacity-50
-									disabled:hover:translate-y-0
-								"
+                                    flex
+                                    h-11
+                                    w-11
+                                    shrink-0
+                                    items-center
+                                    justify-center
+                                    rounded-xl
+                                    bg-(--accent)
+                                    text-white
+                                    shadow-lg
+                                    shadow-blue-500/20
+                                    transition
+                                    hover:-translate-y-0.5
+                                    hover:brightness-110
+                                    disabled:cursor-not-allowed
+                                    disabled:opacity-50
+                                    disabled:hover:translate-y-0
+                                "
 								aria-label="Send message">
 								{loading ? (
 									<Loader2 className="h-4 w-4 animate-spin" />
@@ -451,24 +451,23 @@ export default function AIChatWidget() {
 				type="button"
 				onClick={() => setOpen((current) => !current)}
 				className="
-					flex
-					h-13
-					w-13
-					items-center
-					justify-center
-					rounded-2xl
-					bg-(--accent)
-					text-white
-					shadow-xl
-					shadow-blue-500/25
-					transition
-					hover:-translate-y-1
-					hover:brightness-110
-				"
+                    p-3 
+                    rounded-xl 
+                    bg-(--accent)
+                    text-white 
+                    shadow-lg 
+                    shadow-blue-500/25 
+                    hover:brightness-110
+                    active:scale-95 
+                    transition-all 
+                    duration-200 
+                    select-none 
+                    touch-action-manipulation
+                "
 				aria-label={
 					open ? "Hide Gemini AI assistant" : "Open Gemini AI assistant"
 				}>
-				<MessageCircle size={22} />
+				<MessageCircle size={20} />
 			</button>
 		</div>
 	);
