@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+	process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
 );
 
 const GOOGLE_TRENDS_RSS = "https://trends.google.com/trending/rss?geo=IN";

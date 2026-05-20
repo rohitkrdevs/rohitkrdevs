@@ -24,7 +24,7 @@ export default function Blogs() {
 		async function fetchAutomatedArticles() {
 			// 1. Get environment variables safely inside the effect
 			const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-			const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+			const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 			// 2. Build-time/Missing Key Guard:
 			// If keys aren't present, we just return empty state and stop here.
