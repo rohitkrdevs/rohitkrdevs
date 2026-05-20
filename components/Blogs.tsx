@@ -1,19 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { motion, type Variants } from "framer-motion";
 import { ArrowUpRight, BookOpen, Calendar } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
-
-// ⚡ Dynamic build fallbacks shield the client initialization block from crashing on empty worker scopes
-const supabaseUrl =
-	process.env.NEXT_PUBLIC_SUPABASE_URL ||
-	"https://placeholder-project.supabase.co";
-const supabaseAnonKey =
-	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-token";
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface BlogPost {
 	id: number;
@@ -29,10 +20,18 @@ export default function Blogs() {
 	const [posts, setPosts] = useState<BlogPost[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
+	// ⚡ Initialize Supabase client inside useMemo so it doesn't run during build/static-analysis
+	const supabase = useMemo(() => {
+		const url =
+			process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
+		const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key";
+		return createClient(url, key);
+	}, []);
+
 	useEffect(() => {
 		async function fetchAutomatedArticles() {
-			// 🛑 Cancel data fetching entirely if actual live environment variables aren't injected yet
-			if (supabaseUrl.includes("placeholder-project")) {
+			// Check if we are using the placeholder
+			if (process.env.NEXT_PUBLIC_SUPABASE_URL === undefined) {
 				setPosts([]);
 				setLoading(false);
 				return;
@@ -47,15 +46,15 @@ export default function Blogs() {
 
 				if (error) throw error;
 				if (data) setPosts(data);
-			} catch (err) {
-				// Production-safe state fallback: clears articles if connection fails or table doesn't exist yet
+			} catch {
+				// No parameters needed here since we are just setting an empty state
 				setPosts([]);
 			} finally {
 				setLoading(false);
 			}
 		}
 		fetchAutomatedArticles();
-	}, []);
+	}, [supabase]);
 
 	const containerVariants: Variants = {
 		hidden: { opacity: 0 },
