@@ -5,7 +5,8 @@ import { Moon, Sun } from "lucide-react";
 import { useSyncExternalStore } from "react";
 
 export default function ThemeToggle() {
-	const { theme, setTheme } = useTheme();
+	const { theme, resolvedTheme, setTheme } = useTheme();
+
 	const mounted = useSyncExternalStore(
 		() => () => {},
 		() => true,
@@ -13,26 +14,51 @@ export default function ThemeToggle() {
 	);
 
 	const handleToggle = () => {
-		// add transition class BEFORE switching theme
+		// 1. Inject the crossfade class right before changing the state
 		document.documentElement.classList.add("theme-transition");
 
-		setTheme(theme === "dark" ? "light" : "dark");
+		// 2. Safely swap based on actual evaluated visibility
+		const currentTheme = theme === "system" ? resolvedTheme : theme;
+		setTheme(currentTheme === "dark" ? "light" : "dark");
 
-		// remove after animation completes
+		// 3. Clean up the transitions class after completion
 		setTimeout(() => {
 			document.documentElement.classList.remove("theme-transition");
 		}, 1000);
 	};
 
 	if (!mounted) {
-		return <div className="w-9 h-9" />;
+		return null; // Prevents layout pops during the hydration phase
 	}
 
 	return (
 		<button
 			onClick={handleToggle}
-			className="p-2 rounded-lg border border-foreground/20 bg-background text-foreground transition">
-			{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+			aria-label="Toggle theme mode"
+			className="
+                fixed 
+                right-4 
+                top-1/2 
+                -translate-y-1/2 
+                z-50 
+                p-3 
+                rounded-xl 
+                border 
+                border-foreground/10 
+                bg-background/80 
+                backdrop-blur-md 
+                text-foreground 
+                shadow-lg 
+                shadow-black/5 
+                hover:bg-muted/80 
+                hover:border-foreground/20 
+                active:scale-95 
+                transition-all 
+                duration-200 
+                select-none 
+                touch-action-manipulation
+            ">
+			{resolvedTheme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
 		</button>
 	);
 }

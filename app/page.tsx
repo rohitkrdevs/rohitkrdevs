@@ -4,10 +4,12 @@ import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import Certifications from "@/components/Certifications";
+import Blogs from "@/components/Blogs";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import GoToTopButton from "@/components/GoToTopButton";
 import AIChatWidget from "@/components/AIChatWidget";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
 	return (
@@ -73,6 +75,16 @@ export default function Home() {
 					<Certifications />
 				</section>
 
+				{/* Blogs */}
+				<section
+					id="blogs"
+					className="
+						container
+						section
+					">
+					<Blogs />
+				</section>
+
 				{/* Contact */}
 				<section
 					id="contact"
@@ -92,6 +104,9 @@ export default function Home() {
 
 			{/* AI Assistant */}
 			<AIChatWidget />
+
+			{/* AI Assistant */}
+			<ThemeToggle />
 		</div>
 	);
 }

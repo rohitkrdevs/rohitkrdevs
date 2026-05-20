@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
-import ThemeToggle from "./ThemeToggle";
 import {
 	User,
 	Briefcase,
@@ -9,6 +8,7 @@ import {
 	FolderGit2,
 	Mail,
 	Award,
+	BookOpen,
 } from "lucide-react";
 
 import gsap from "gsap";
@@ -25,6 +25,7 @@ export default function Navbar() {
 			{ name: "Skills", icon: Code2, href: "#skills" },
 			{ name: "Projects", icon: FolderGit2, href: "#projects" },
 			{ name: "Certifications", icon: Award, href: "#certifications" },
+			{ name: "Blogs", icon: BookOpen, href: "#blogs" },
 			{ name: "Contact", icon: Mail, href: "#contact" },
 		],
 		[],
@@ -41,49 +42,52 @@ export default function Navbar() {
 		);
 	}, []);
 
-	// Scroll spy
+	// Fixed Robust Scroll Spy using Viewport-Relative coordinates
 	useEffect(() => {
 		const handleScroll = () => {
-			const scrollPosition = window.scrollY + window.innerHeight * 0.35;
-
+			// We give it a comfortable offset (30% from the top of the viewport)
+			const triggerLine = window.innerHeight * 0.3;
 			let currentSection = "#about";
 
-			for (const link of links) {
+			// Loop backwards to catch the lowest active element on screen
+			for (let i = links.length - 1; i >= 0; i--) {
+				const link = links[i];
 				const section = document.getElementById(link.href.replace("#", ""));
 
 				if (!section) continue;
 
-				const sectionTop = section.offsetTop;
-				const sectionHeight = section.offsetHeight;
+				const rect = section.getBoundingClientRect();
 
-				if (
-					scrollPosition >= sectionTop &&
-					scrollPosition < sectionTop + sectionHeight
-				) {
+				// If the top of the section has crossed our trigger line, set it active and stop
+				if (rect.top <= triggerLine) {
 					currentSection = link.href;
+					break;
 				}
+			}
+
+			// Edge-case safety: If scrolled all the way to the bottom, force hit Contact
+			if (
+				window.innerHeight + window.scrollY >=
+				document.documentElement.scrollHeight - 20
+			) {
+				currentSection = "#contact";
 			}
 
 			setActive(currentSection);
 		};
 
-		window.addEventListener("scroll", handleScroll, {
-			passive: true,
-		});
-
-		handleScroll();
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		handleScroll(); // Initial run
 
 		return () => {
 			window.removeEventListener("scroll", handleScroll);
 		};
 	}, [links]);
 
-	// shared styles
 	const baseItem =
-		"group relative nav-item flex items-center justify-center w-10 h-10 md:w-14 md:h-14 aspect-square rounded-full transition-all duration-300 ease-out";
+		"group relative nav-item flex items-center justify-center w-11 h-11 md:w-16 md:h-16 aspect-square rounded-full transition-all duration-300 ease-out";
 
 	const activeItem = "bg-[var(--fg)] text-[var(--bg)] shadow-md scale-105";
-
 	const inactiveItem = "hover:bg-foreground/10 hover:scale-110";
 
 	return (
@@ -91,11 +95,13 @@ export default function Navbar() {
 			<nav
 				ref={navRef}
 				className="
-				w-full sm:w-auto
-				max-w-6xl
-				flex items-center justify-center
+				w-auto
+				max-w-fit
+				flex
+				items-center
+				justify-center
 				gap-1.5 sm:gap-3
-				px-2 sm:px-4
+				px-1.5 sm:px-3
 				py-1.5 sm:py-3
 				rounded-full
 				backdrop-blur-xl
@@ -142,10 +148,10 @@ export default function Navbar() {
 				})}
 
 				{/* DIVIDER (FIXED VISIBILITY) */}
-				<div className="w-px h-6 sm:h-8 bg-(--fg)/60 mx-1.5 sm:mx-2" />
+				{/* <div className="w-px h-6 sm:h-8 bg-(--fg)/60 mx-1.5 sm:mx-2" /> */}
 
 				{/* THEME TOGGLE */}
-				<ThemeToggle />
+				{/* <ThemeToggle /> */}
 			</nav>
 		</div>
 	);
