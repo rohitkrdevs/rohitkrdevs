@@ -137,7 +137,8 @@ export default function RootLayout({
 		<html
 			lang="en"
 			suppressHydrationWarning
-			className={`${inter.variable} ${spaceGrotesk.variable}`}>
+			className={`${inter.variable} ${spaceGrotesk.variable}`}
+			data-scroll-behavior="smooth">
 			<body
 				className="
 					min-h-screen

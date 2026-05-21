@@ -117,10 +117,10 @@ export default function Blogs() {
 						viewport={{ once: true }}
 						transition={{ duration: 0.5 }}
 						className="hidden md:block">
-						<a href="/blog" className="blog-action-link">
+						<Link href="/blog" className="blog-action-link">
 							Explore all articles
 							<ArrowUpRight size={16} className="blog-action-icon" />
-						</a>
+						</Link>
 					</motion.div>
 				</div>
 
@@ -211,10 +211,10 @@ export default function Blogs() {
 				)}
 
 				<div className="blog-mobile-action-wrap">
-					<a href="/blog" className="blog-mobile-btn">
+					<Link href="/blog" className="blog-mobile-btn">
 						Explore all articles
 						<ArrowUpRight size={16} />
-					</a>
+					</Link>
 				</div>
 			</div>
 		</section>

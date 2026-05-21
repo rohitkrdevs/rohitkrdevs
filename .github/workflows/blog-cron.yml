@@ -1,0 +1,40 @@
+name: Daily Blog Cron
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trigger-blog-cron:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Trigger production blog generator
+        env:
+          PROD_URL: ${{ secrets.PROD_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${PROD_URL}" || -z "${CRON_SECRET}" ]]; then
+            echo "Missing PROD_URL or CRON_SECRET repository secret." >&2
+            exit 1
+          fi
+
+          PROD_URL="${PROD_URL%/}"
+
+          curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --retry 3 \
+            --retry-delay 10 \
+            --get \
+            --data-urlencode "secret=${CRON_SECRET}" \
+            "${PROD_URL}/api/cron"

@@ -182,29 +182,27 @@ export default function Navbar() {
 				role="navigation"
 				aria-label="Main Navigation"
 				className="
-        pointer-events-auto
-        relative
-        flex items-center justify-center
-        
-        w-full max-w-(--container) sm:w-auto sm:max-w-fit
-		mx-auto
-		px-4 md:px-6
-        
-        p-1.5 sm:p-2 lg:p-2.5
-        rounded-full
-        
-        /* UNIVERSAL GLASSMORPHISM EFFECTS */
-        backdrop-blur-3xl saturate-200
-        transition-colors duration-500
+				pointer-events-auto
+				relative
+				flex items-center justify-center
+				
+				w-full max-w-[calc(100%-2rem)] sm:w-auto sm:max-w-fit
+				
+				p-1.5 sm:p-2 lg:p-2.5
+				rounded-full
+				
+				/* UNIVERSAL GLASSMORPHISM EFFECTS */
+				backdrop-blur-3xl saturate-200
+				transition-colors duration-500
 
-        bg-white/75
-        border border-black/10
-        shadow-[0_8px_32px_rgba(0,0,0,0.08)]
-        
-        dark:bg-[#0a0a0a]/65
-        dark:border-white/15
-        dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]
-    ">
+				bg-white/75
+				border border-black/10
+				shadow-[0_8px_32px_rgba(0,0,0,0.08)]
+				
+				dark:bg-[#0a0a0a]/65
+				dark:border-white/15
+				dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]
+			">
 				<ul className="flex items-center justify-between sm:justify-center w-full gap-1 sm:gap-2 lg:gap-3 m-0 p-0 list-none">
 					{links.map((item) => {
 						const Icon = item.icon;
