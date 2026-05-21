@@ -186,7 +186,9 @@ export default function Navbar() {
         relative
         flex items-center justify-center
         
-        w-full max-w-114 sm:w-auto sm:max-w-fit
+        w-full max-w-(--container) sm:w-auto sm:max-w-fit
+		mx-auto
+		px-4 md:px-6
         
         p-1.5 sm:p-2 lg:p-2.5
         rounded-full
