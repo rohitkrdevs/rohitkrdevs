@@ -10,16 +10,21 @@ import {
 	Award,
 	BookOpen,
 } from "lucide-react";
-
 import gsap from "gsap";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
 	const [active, setActive] = useState("#about");
-	const navRef = useRef<HTMLDivElement | null>(null);
+	const navRef = useRef<HTMLElement | null>(null);
+
+	// Core Scroll Lock Engine Refs
+	const isScrolling = useRef(false);
+	const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+	const fallbackTimeout = useRef<NodeJS.Timeout | null>(null);
+	const scrollListener = useRef<(() => void) | null>(null);
 
 	const links = useMemo(
 		() => [
-			// { name: "Home", icon: Home, href: "#home" },
 			{ name: "About", icon: User, href: "#about" },
 			{ name: "Experience", icon: Briefcase, href: "#experience" },
 			{ name: "Skills", icon: Code2, href: "#skills" },
@@ -31,127 +36,261 @@ export default function Navbar() {
 		[],
 	);
 
-	// GSAP entrance animation
+	// 1. Premium Entrance Animation (Unchanged)
 	useEffect(() => {
 		if (!navRef.current) return;
 
 		gsap.fromTo(
 			navRef.current,
-			{ y: -20, opacity: 0, scale: 0.96 },
-			{ y: 0, opacity: 1, scale: 1, duration: 0.7, ease: "power3.out" },
+			{ y: -40, opacity: 0, scale: 0.95 },
+			{
+				y: 0,
+				opacity: 1,
+				scale: 1,
+				duration: 1.2,
+				ease: "elastic.out(1, 0.75)",
+				delay: 0.1,
+			},
 		);
 	}, []);
 
-	// Fixed Robust Scroll Spy using Viewport-Relative coordinates
+	// 2. High-Performance Intersection Observer
 	useEffect(() => {
-		const handleScroll = () => {
-			// We give it a comfortable offset (30% from the top of the viewport)
-			const triggerLine = window.innerHeight * 0.3;
-			let currentSection = "#about";
+		const observerOptions = {
+			root: null,
+			rootMargin: "-30% 0px -70% 0px",
+			threshold: 0,
+		};
 
-			// Loop backwards to catch the lowest active element on screen
-			for (let i = links.length - 1; i >= 0; i--) {
-				const link = links[i];
-				const section = document.getElementById(link.href.replace("#", ""));
+		const activeSections = new Map<string, boolean>();
 
-				if (!section) continue;
+		const observerCallback = (entries: IntersectionObserverEntry[]) => {
+			// CRITICAL: Block all observer updates if smooth-scrolling is active
+			if (isScrolling.current) return;
 
-				const rect = section.getBoundingClientRect();
+			entries.forEach((entry) => {
+				activeSections.set(entry.target.id, entry.isIntersecting);
+			});
 
-				// If the top of the section has crossed our trigger line, set it active and stop
-				if (rect.top <= triggerLine) {
-					currentSection = link.href;
-					break;
+			for (const link of links) {
+				const id = link.href.replace("#", "");
+				if (activeSections.get(id)) {
+					setActive(link.href);
+					return;
 				}
 			}
 
-			// Edge-case safety: If scrolled all the way to the bottom, force hit Contact
 			if (
 				window.innerHeight + window.scrollY >=
-				document.documentElement.scrollHeight - 20
+				document.documentElement.scrollHeight - 50
 			) {
-				currentSection = "#contact";
+				setActive("#contact");
 			}
-
-			setActive(currentSection);
 		};
 
-		window.addEventListener("scroll", handleScroll, { passive: true });
-		handleScroll(); // Initial run
+		const observer = new IntersectionObserver(
+			observerCallback,
+			observerOptions,
+		);
 
-		return () => {
-			window.removeEventListener("scroll", handleScroll);
-		};
+		links.forEach((link) => {
+			const el = document.getElementById(link.href.replace("#", ""));
+			if (el) observer.observe(el);
+		});
+
+		return () => observer.disconnect();
 	}, [links]);
 
-	const baseItem =
-		"group relative nav-item flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 aspect-square rounded-full transition-all duration-300 ease-out";
+	// Cleanup memory leaks on unmount
+	useEffect(() => {
+		return () => {
+			if (scrollListener.current)
+				window.removeEventListener("scroll", scrollListener.current);
+			if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+			if (fallbackTimeout.current) clearTimeout(fallbackTimeout.current);
+		};
+	}, []);
 
-	const activeItem = "bg-[var(--fg)] text-[var(--bg)] shadow-md scale-105";
-	const inactiveItem = "hover:bg-foreground/10 hover:scale-110";
+	// 3. Production-Grade Smooth Scroll & State Lock Manager
+	const handleNavClick = (
+		e: React.MouseEvent<HTMLAnchorElement>,
+		href: string,
+	) => {
+		e.preventDefault();
+
+		const targetId = href.replace("#", "");
+		const targetElement = document.getElementById(targetId);
+
+		if (!targetElement) return;
+
+		// 1. Immediately lock the scroll spy and set the target active state
+		isScrolling.current = true;
+		setActive(href);
+
+		const offsetPosition =
+			targetElement.getBoundingClientRect().top + window.scrollY - 100;
+
+		// Optimization: If we are already at the exact target, unlock and return instantly
+		if (Math.abs(window.scrollY - offsetPosition) < 2) {
+			isScrolling.current = false;
+			return;
+		}
+
+		// 2. Clean up any existing listeners from rapid consecutive clicks
+		if (scrollListener.current)
+			window.removeEventListener("scroll", scrollListener.current);
+		if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+		if (fallbackTimeout.current) clearTimeout(fallbackTimeout.current);
+
+		// 3. Dynamic Scroll-End Detection Strategy
+		const handleScroll = () => {
+			if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+			// If the scroll event stops firing for 100ms, physical scrolling has ended
+			scrollTimeout.current = setTimeout(() => {
+				isScrolling.current = false;
+				if (scrollListener.current) {
+					window.removeEventListener("scroll", scrollListener.current);
+					scrollListener.current = null;
+				}
+			}, 100);
+		};
+
+		scrollListener.current = handleScroll;
+		window.addEventListener("scroll", handleScroll, { passive: true });
+
+		// 4. Absolute Fallback: Releases lock if scroll events fail/get interrupted
+		fallbackTimeout.current = setTimeout(() => {
+			isScrolling.current = false;
+			if (scrollListener.current) {
+				window.removeEventListener("scroll", scrollListener.current);
+				scrollListener.current = null;
+			}
+		}, 2000);
+
+		// 5. Trigger the actual browser native smooth scroll
+		window.scrollTo({
+			top: offsetPosition,
+			behavior: "smooth",
+		});
+	};
 
 	return (
-		<div className="fixed top-4 left-0 w-full z-50 flex justify-center px-8 pb-4">
+		<div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
 			<nav
 				ref={navRef}
+				role="navigation"
+				aria-label="Main Navigation"
 				className="
-				w-auto
-				max-w-fit
-				flex
-				items-center
-				justify-center
-				gap-2 sm:gap-3
-				px-3 sm:px-4    {/* Increased padding for mobile buffer */}
-				py-2 sm:py-3    {/* Increased vertical padding to match */}
-				rounded-full
-				backdrop-blur-xl
-				border border-foreground/10
-				bg-background/70
-				text-foreground
-				shadow-lg
-				/* Removed overflow-hidden to allow subtle item shadows/scales to breathe */
-			">
-				{/* MENU ITEMS */}
-				{links.map((item) => {
-					const Icon = item.icon;
-					const isActive = active === item.href;
+        pointer-events-auto
+        relative
+        flex items-center justify-center
+        
+        w-full max-w-114 sm:w-auto sm:max-w-fit
+        
+        p-1.5 sm:p-2 lg:p-2.5
+        rounded-full
+        
+        /* UNIVERSAL GLASSMORPHISM EFFECTS */
+        backdrop-blur-3xl saturate-200
+        transition-colors duration-500
 
-					return (
-						<a
-							key={item.name}
-							href={item.href}
-							onClick={() => setActive(item.href)}
-							className={`${baseItem} ${isActive ? activeItem : inactiveItem} shrink-0`}
-							aria-label={item.name}>
-							<Icon size={18} />
+        bg-white/75
+        border border-black/10
+        shadow-[0_8px_32px_rgba(0,0,0,0.08)]
+        
+        dark:bg-[#0a0a0a]/65
+        dark:border-white/15
+        dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]
+    ">
+				<ul className="flex items-center justify-between sm:justify-center w-full gap-1 sm:gap-2 lg:gap-3 m-0 p-0 list-none">
+					{links.map((item) => {
+						const Icon = item.icon;
+						const isActive = active === item.href;
 
-							{/* Tooltip (only inactive) */}
-							{!isActive && (
-								<span
-									className="
-									absolute -bottom-8 text-xs
-									opacity-0 group-hover:opacity-100
-									text-slate-600 dark:text-(--muted)
-									transition
-									pointer-events-none
-								">
-									{item.name}
-								</span>
-							)}
+						return (
+							<li
+								key={item.name}
+								className="relative flex-1 sm:flex-initial flex justify-center">
+								<a
+									href={item.href}
+									onClick={(e) => handleNavClick(e, item.href)}
+									aria-current={isActive ? "page" : undefined}
+									className={`
+                                        group relative flex items-center justify-center 
+                                        
+                                        w-full aspect-square sm:w-11 sm:h-11 md:w-12 md:h-12 lg:w-14 lg:h-14
+                                        max-w-14 sm:max-w-none
+                                        
+                                        rounded-full outline-none
+                                        transition-colors duration-300 ease-out
+                                        focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent
+                                        
+                                        ${!isActive && "hover:bg-black/5 dark:hover:bg-white/10"}
+                                    `}>
+									{isActive && (
+										<motion.div
+											layoutId="active-nav-pill"
+											transition={{
+												type: "spring",
+												stiffness: 380,
+												damping: 30,
+												mass: 0.8,
+											}}
+											className="
+            absolute inset-0 rounded-full 
+            
+            /* LIGHT THEME: Dark background */
+            bg-zinc-950 
+            shadow-[0_2px_12px_rgba(0,0,0,0.12)] 
+            
+            /* DARK THEME: Light background */
+            dark:bg-white 
+            dark:shadow-[0_0_20px_rgba(255,255,255,0.15)]
+        "
+										/>
+									)}
 
-							{/* Active dot */}
-							{isActive && (
-								<span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-foreground" />
-							)}
-						</a>
-					);
-				})}
+									<span
+										className={`
+                                            relative z-10 transition-transform duration-300
+                                            group-hover:scale-110 group-active:scale-95
+                                            
+                                            ${
+																							isActive
+																								? "text-white dark:text-zinc-950"
+																								: "text-zinc-900 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-zinc-50"
+																						}
+                                        `}>
+										<Icon
+											className="h-4.5 w-4.5 md:h-5 md:w-5 lg:h-6 lg:w-6"
+											strokeWidth={2}
+										/>
+									</span>
 
-				{/* DIVIDER (FIXED VISIBILITY) */}
-				{/* <div className="w-px h-6 sm:h-8 bg-(--fg)/60 mx-1.5 sm:mx-2" /> */}
-
-				{/* THEME TOGGLE */}
-				{/* <ThemeToggle /> */}
+									<span
+										className="
+                                            absolute top-full mt-3 left-1/2 -translate-x-1/2 
+                                            text-[11px] lg:text-xs font-semibold tracking-wide whitespace-nowrap
+                                            opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0
+                                            
+                                            text-zinc-600 dark:text-zinc-300 
+                                            bg-white/95 dark:bg-[#0a0a0a]/95 
+                                            backdrop-blur-xl
+                                            border border-black/5 dark:border-white/10
+                                            shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)]
+                                            
+                                            px-3 lg:px-3.5 py-1.5 lg:py-2 rounded-lg
+                                            pointer-events-none transition-all duration-300 ease-out
+                                            z-50
+                                        ">
+										{item.name}
+									</span>
+								</a>
+							</li>
+						);
+					})}
+				</ul>
 			</nav>
 		</div>
 	);

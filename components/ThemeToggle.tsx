@@ -36,27 +36,27 @@ export default function ThemeToggle() {
 			onClick={handleToggle}
 			aria-label="Toggle theme mode"
 			className="
-                fixed 
-               	left-6 
-				bottom-20
-                z-50 
-                p-3 
-                rounded-xl 
-                border 
-                border-foreground/10 
-                bg-background/80 
-                backdrop-blur-md 
-                text-foreground 
-                shadow-lg 
-                shadow-black/5 
-                hover:bg-muted/80 
-                hover:border-foreground/20 
-                active:scale-95 
-                transition-all 
-                duration-200 
-                select-none 
-                touch-action-manipulation
-            ">
+				fixed 
+				right-6 
+				bottom-6 
+				z-50 
+				p-3 
+				rounded-xl 
+				border 
+				border-foreground/10 
+				bg-background/80 
+				backdrop-blur-md 
+				text-foreground 
+				shadow-lg 
+				shadow-black/5 
+				hover:bg-muted/80 
+				hover:border-foreground/20 
+				active:scale-95 
+				transition-all 
+				duration-200 
+				select-none 
+				touch-action-manipulation
+			">
 			{resolvedTheme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
 		</button>
 	);

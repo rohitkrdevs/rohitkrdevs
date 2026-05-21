@@ -1,14 +1,16 @@
-name: Daily Automated Blog Scheduler
+name: Automated Blog Generation
 
 on:
   schedule:
-    - cron: "0 4 * * *" # Fires automatically every morning at 4:00 AM UTC
-  workflow_dispatch: # Allows you to manually trigger it via GitHub UI if needed
+    # This cron syntax runs the job every day at 2:00 AM UTC (adjust as needed)
+    - cron: "0 2 * * *"
+  # workflow_dispatch allows you to manually click a "Run" button in GitHub to test it
+  workflow_dispatch:
 
 jobs:
-  run-cron:
+  trigger-api:
     runs-on: ubuntu-latest
     steps:
-      - name: Hit Next.js Production Generation Endpoint
+      - name: Hit the Next.js Cron Endpoint
         run: |
-          curl -X GET "https://rohitkrdevs.vercel.app/api/cron?secret=${{ secrets.CRON_SECRET }}"
+          curl -f -X GET "${{ secrets.PROD_URL }}/api/cron?secret=${{ secrets.CRON_SECRET }}"

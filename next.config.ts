@@ -1,7 +1,20 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-	/* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "**.supabase.co", // Whitelists your Supabase storage
+				port: "",
+				pathname: "/storage/v1/object/public/**",
+			},
+			// Example: If you use Unsplash placeholders in your DB
+			{
+				protocol: "https",
+				hostname: "images.unsplash.com",
+			},
+		],
+	},
 };
 
 export default nextConfig;

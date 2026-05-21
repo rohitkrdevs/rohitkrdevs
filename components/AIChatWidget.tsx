@@ -451,19 +451,23 @@ export default function AIChatWidget() {
 				type="button"
 				onClick={() => setOpen((current) => !current)}
 				className="
-                    p-3 
-                    rounded-xl 
-                    bg-(--accent)
-                    text-white 
-                    shadow-lg 
-                    shadow-blue-500/25 
-                    hover:brightness-110
-                    active:scale-95 
-                    transition-all 
-                    duration-200 
-                    select-none 
-                    touch-action-manipulation
-                "
+					fixed 
+					left-6 
+					bottom-6 
+					z-50 
+					p-3 
+					rounded-xl 
+					bg-(--accent)
+					text-white 
+					shadow-lg 
+					shadow-blue-500/25 
+					hover:brightness-110
+					active:scale-95 
+					transition-all 
+					duration-200 
+					select-none 
+					touch-action-manipulation
+				"
 				aria-label={
 					open ? "Hide Gemini AI assistant" : "Open Gemini AI assistant"
 				}>

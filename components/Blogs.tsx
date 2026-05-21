@@ -5,6 +5,7 @@ import { motion, type Variants } from "framer-motion";
 import { ArrowUpRight, BookOpen, Calendar } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
+import Link from "next/link";
 
 interface BlogPost {
 	id: number;
@@ -22,40 +23,51 @@ export default function Blogs() {
 
 	useEffect(() => {
 		async function fetchAutomatedArticles() {
-			// 1. Get environment variables safely inside the effect
+			// 1. Get environment variables safely using YOUR specific naming convention
 			const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 			const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-			// 2. Build-time/Missing Key Guard:
-			// If keys aren't present, we just return empty state and stop here.
+			// 2. Build-time/Missing Key Guard with explicit debugging
 			if (
 				!supabaseUrl ||
 				!supabaseAnonKey ||
 				supabaseUrl.includes("placeholder")
 			) {
+				console.error(
+					"Supabase Setup Error: Missing or invalid environment variables. Check your .env.local file.",
+				);
 				setLoading(false);
 				setPosts([]);
 				return;
 			}
 
-			// 3. Initialize ONLY when we are sure keys exist (Client-side runtime)
+			// 3. Initialize client securely
 			const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 			try {
+				// 4. Fetch data with detailed error catching
 				const { data, error } = await supabase
 					.from("blogs")
 					.select("*")
 					.order("published_at", { ascending: false })
 					.limit(3);
 
-				if (error) throw error;
-				if (data) setPosts(data);
-			} catch {
+				if (error) {
+					console.error("Supabase Fetch Error:", error.message, error.details);
+					throw error;
+				}
+
+				if (data) {
+					setPosts(data);
+				}
+			} catch (err) {
+				console.error("Failed to load blog posts:", err);
 				setPosts([]);
 			} finally {
 				setLoading(false);
 			}
 		}
+
 		fetchAutomatedArticles();
 	}, []);
 
@@ -137,7 +149,6 @@ export default function Blogs() {
 							<motion.article
 								key={post.id}
 								variants={cardVariants}
-								whileHover={{ y: -6 }}
 								className="blog-card group">
 								<div className="relative z-10 flex flex-col h-full">
 									<div className="w-full h-48 rounded-xl overflow-hidden mb-4 border border-foreground/5 bg-muted/20 relative">
@@ -163,11 +174,9 @@ export default function Blogs() {
 									</div>
 
 									<h4 className="blog-card-title">
-										<a
-											href={`/blog/${post.slug}`}
-											className="focus:outline-none hover:text-blue-500 transition-colors">
+										<Link href={`/blog/${post.slug}`} className="...">
 											{post.title}
-										</a>
+										</Link>
 									</h4>
 
 									<p className="blog-card-desc line-clamp-3">{post.excerpt}</p>
