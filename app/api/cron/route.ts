@@ -5,11 +5,6 @@ import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-	process.env.NEXT_PUBLIC_SUPABASE_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-);
-
 const GOOGLE_TRENDS_RSS = "https://trends.google.com/trending/rss?geo=IN";
 
 export async function GET(request: Request) {
@@ -20,7 +15,20 @@ export async function GET(request: Request) {
 	}
 
 	try {
-		// 1. Fetch current trending feeds
+		// ⚡ 1. Initialize Supabase inside the function using the MASTER (Service Role) key
+		const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+		const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+		if (!supabaseUrl || !supabaseServiceKey) {
+			throw new Error(
+				"Missing Supabase Service Role Key in environment variables.",
+			);
+		}
+
+		// Using the service key allows backend API to bypass RLS policies and insert data
+		const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+		// 2. Fetch current trending feeds
 		const rssResponse = await fetch(GOOGLE_TRENDS_RSS, { cache: "no-store" });
 		const xmlData = await rssResponse.text();
 		const parsedFeed = await parseStringPromise(xmlData);
@@ -36,7 +44,7 @@ export async function GET(request: Request) {
 			.replace(/[^a-z0-9]+/g, "-")
 			.replace(/(^-|-$)/g, "");
 
-		// 2. Prevent duplication bugs
+		// 3. Prevent duplication bugs
 		const { data: existingPost } = await supabase
 			.from("blogs")
 			.select("id")
@@ -49,7 +57,7 @@ export async function GET(request: Request) {
 			});
 		}
 
-		// 3. Command high-performance technical content production
+		// 4. Command high-performance technical content production
 		const prompt = `Write a deep-dive, professional technical blog post analyzing the real-world impact of the topic: "${keyword}".
     Requirements:
     - Write it for experienced software developers and technology architects.
@@ -75,13 +83,13 @@ export async function GET(request: Request) {
 		const aiData = await aiResponse.json();
 		const blogDraft = JSON.parse(aiData.choices[0].message.content);
 
-		// 4. Build dynamic Unsplash optimization URLs
+		// 5. Build dynamic Unsplash optimization URLs
 		const encodedTerm = encodeURIComponent(
 			blogDraft.imageSearchTerm || "cyberpunk code technology",
 		);
 		const optimizedCoverUrl = `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80&sig=${Math.floor(Math.random() * 99999)}&q=${encodedTerm}`;
 
-		// 5. Insert directly into Supabase database storage
+		// 6. Insert directly into Supabase database storage
 		const { error: dbError } = await supabase.from("blogs").insert([
 			{
 				title: blogDraft.title,
@@ -96,18 +104,22 @@ export async function GET(request: Request) {
 
 		if (dbError) throw dbError;
 
-		// 6. Instantly clear Next.js static asset caches
+		// 7. Instantly clear Next.js static asset caches
 		revalidatePath("/");
 		revalidatePath("/blog");
 
 		return NextResponse.json({ success: true, topic: keyword });
-		// src/app/api/cron/route.ts
 	} catch (error: unknown) {
-		// 👈 Change 'any' to 'unknown' to satisfy TypeScript rules
-		const errorMessage =
-			error instanceof Error
-				? error.message
-				: "An unknown database pipeline error occurred";
+		// ⚡ Smarter Error Parsing: Converts Supabase JSON errors to readable strings
+		let errorMessage = "An unknown database pipeline error occurred";
+
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		} else if (typeof error === "object" && error !== null) {
+			errorMessage = JSON.stringify(error);
+		} else {
+			errorMessage = String(error);
+		}
 
 		console.error("Cron Process Interruption Exception:", error);
 		return NextResponse.json({ error: errorMessage }, { status: 500 });
