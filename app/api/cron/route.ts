@@ -57,6 +57,7 @@ type BlogInsert = BlogDraft & {
 	status: "published";
 	published_at: string;
 	updated_at: string;
+	trending_keyword: string;
 };
 
 const parser = new Parser<RssFeedFields, RssItemFields>({
@@ -466,6 +467,7 @@ export async function GET(request: NextRequest) {
 			status: "published",
 			published_at: now,
 			updated_at: now,
+			trending_keyword: draft.seo_keywords?.[0] || "Technology",
 		};
 
 		const { data: insertedPost, error: insertError } = await supabase
