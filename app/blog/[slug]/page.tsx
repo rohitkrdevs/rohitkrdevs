@@ -5,6 +5,12 @@ import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 
+// Global components
+import Footer from "@/components/Footer";
+import GoToTopButton from "@/components/GoToTopButton";
+import AIChatWidget from "@/components/AIChatWidget";
+import ThemeToggle from "@/components/ThemeToggle";
+
 export const revalidate = 3600;
 
 type PageProps = {
@@ -126,66 +132,71 @@ export default async function BlogPostPage({ params }: PageProps) {
 	const publishedDate = post.published_at ?? post.updated_at;
 
 	return (
-		<main className="min-h-screen bg-background px-4 pb-24 pt-32 text-foreground">
-			<article className="container mx-auto max-w-4xl">
-				<Link
-					href="/blog"
-					className="mb-10 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-slate-400 dark:hover:text-white">
-					<ArrowLeft aria-hidden="true" className="h-4 w-4" />
-					Back to articles
-				</Link>
+		<main className="relative z-10 min-h-screen bg-background pt-12 text-foreground transition-colors duration-300 md:pt-32">
+			<article className="container section article-main">
+				<div className="blog-route-inner">
+					{/* Back Button */}
+					<Link href="/blog" className="article-back-link">
+						<ArrowLeft size={16} />
+						Back to articles
+					</Link>
 
-				<header className="mb-10">
-					<div className="mb-5 flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-						<span className="inline-flex items-center gap-2">
-							<Calendar aria-hidden="true" className="h-4 w-4" />
-							{formatDate(publishedDate)}
-						</span>
-						<span className="inline-flex items-center gap-2">
-							<User aria-hidden="true" className="h-4 w-4" />
-							{post.author_name || "System Automation"}
-						</span>
+					{/* Hero Header */}
+					<header className="article-header">
+						<div className="article-meta">
+							<span className="article-meta-item">
+								<Calendar size={14} />
+								{formatDate(publishedDate)}
+							</span>
+							<span className="article-meta-item">
+								<User size={14} />
+								{post.author_name || "System Automation"}
+							</span>
+						</div>
+
+						<h1 className="article-title">{post.title}</h1>
+
+						{post.excerpt && <p className="article-excerpt">{post.excerpt}</p>}
+
+						{post.tags && post.tags.length > 0 && (
+							<div className="article-tags">
+								{post.tags.map((tag) => (
+									<span key={tag} className="article-tag">
+										{tag}
+									</span>
+								))}
+							</div>
+						)}
+					</header>
+
+					{/* Hero Image */}
+					<div className="article-hero-img-wrap">
+						<Image
+							src={post.image_url || FALLBACK_IMAGE}
+							alt={post.title}
+							fill
+							priority
+							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
+							className="object-cover"
+						/>
 					</div>
 
-					<h1 className="text-4xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
-						{post.title}
-					</h1>
-
-					{post.excerpt && (
-						<p className="mt-6 text-lg leading-8 text-slate-600 dark:text-slate-300">
-							{post.excerpt}
-						</p>
-					)}
-
-					{post.tags && post.tags.length > 0 && (
-						<div className="mt-6 flex flex-wrap gap-2">
-							{post.tags.map((tag) => (
-								<span
-									key={tag}
-									className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
-									{tag}
-								</span>
-							))}
-						</div>
-					)}
-				</header>
-
-				<div className="relative mb-12 aspect-[21/10] overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm dark:border-white/10 dark:bg-slate-900">
-					<Image
-						src={post.image_url || FALLBACK_IMAGE}
-						alt=""
-						fill
-						priority
-						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 900px"
-						className="object-cover"
+					{/* Main Content (Powered entirely by the new CSS) */}
+					<div
+						className="article-content"
+						dangerouslySetInnerHTML={{ __html: post.content || "" }}
 					/>
 				</div>
-
-				<div
-					className="prose prose-lg max-w-none dark:prose-invert prose-headings:scroll-mt-28 prose-headings:font-bold prose-h2:mt-12 prose-h2:text-3xl prose-h3:text-2xl prose-p:leading-8 prose-a:text-blue-600 prose-pre:rounded-xl prose-pre:border prose-pre:border-white/10 prose-pre:bg-slate-950"
-					dangerouslySetInnerHTML={{ __html: post.content || "" }}
-				/>
 			</article>
+
+			{/* Global Utility Components */}
+			<div className="fixed bottom-0 left-0 w-full z-50">
+				<Footer />
+			</div>
+
+			<GoToTopButton />
+			<AIChatWidget />
+			<ThemeToggle />
 		</main>
 	);
 }

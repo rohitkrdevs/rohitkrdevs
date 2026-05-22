@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
-import { ArrowUpRight, BookOpen, Calendar, ArrowLeft } from "lucide-react";
+import { BookOpen, Calendar, ArrowLeft } from "lucide-react";
 
 // Global components
 import Footer from "@/components/Footer";
 import GoToTopButton from "@/components/GoToTopButton";
 import AIChatWidget from "@/components/AIChatWidget";
 import ThemeToggle from "@/components/ThemeToggle";
+// import Navbar from "@/components/Navbar"; // Uncomment if you want the navbar here too!
 
 export const metadata: Metadata = {
 	title: "Blog | Rohit Kumar",
@@ -78,133 +79,117 @@ export default async function BlogPage() {
 	const articles = (posts ?? []) as BlogCard[];
 
 	return (
-		<main className="min-h-screen bg-backgroundtext-foreground transition-colors duration-300">
-			<section className="container mx-auto max-w-7xl px-4 pb-24 pt-12 ">
-				{/* 1. Back Button */}
-				<div className="mb-10">
-					<Link
-						href="/"
-						className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors group">
-						<ArrowLeft
-							size={16}
-							className="transition-transform group-hover:-translate-x-1"
-						/>
-						Back to Home
-					</Link>
-				</div>
+		<div className="relative min-h-screen flex flex-col overflow-hidden bg-background text-foreground transition-colors duration-300">
+			{/* <Navbar /> Uncomment this if you want your standard navbar on the blog page */}
 
-				<div className="mb-12 flex flex-col gap-4 md:mb-16 md:flex-row md:items-end md:justify-between">
-					<div className="max-w-3xl">
-						<p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-blue-600 dark:text-blue-400">
-							Articles & Insights
-						</p>
-						<h1 className="text-4xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
-							Engineering Field Notes
-						</h1>
-						<p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-300">
-							Automated technical deep-dives, architecture notes, and practical
-							software analysis built from current engineering signals.
-						</p>
-					</div>
-				</div>
+			<main className="relative z-10 pt-12 md:pt-32 flex-1">
+				<section className="container section blog-section">
+					{/* Your Custom Ambient Glow */}
+					<div className="blog-glow-position"></div>
 
-				{articles.length === 0 ? (
-					<div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 px-6 py-16 text-center shadow-sm dark:border-white/10 dark:bg-white/3">
-						<BookOpen
-							aria-hidden="true"
-							className="mx-auto mb-4 h-8 w-8 text-slate-400"
-						/>
-						<h2 className="text-2xl font-bold text-slate-950 dark:text-white">
-							No articles published yet
-						</h2>
-						<p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-300">
-							The daily automation is ready to publish the next technical
-							article once the cron endpoint runs.
-						</p>
-					</div>
-				) : (
-					<div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-						{articles.map((post) => {
-							const href = `/blog/${post.slug}`;
-							const publishedDate = post.published_at ?? post.updated_at;
+					{/* Content Layer */}
+					<div className="blog-route-inner relative z-10">
+						{/* 1. Back Button */}
+						<div className="mb-10">
+							<Link
+								href="/"
+								className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors group">
+								<ArrowLeft
+									size={16}
+									className="transition-transform group-hover:-translate-x-1"
+								/>
+								Back to Home
+							</Link>
+						</div>
 
-							return (
-								<Link
-									key={post.id}
-									href={href}
-									className="group block h-full overflow-hidden rounded-2xl border border-slate-200 bg-white/85 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-white/10 dark:bg-white/4 dark:hover:border-blue-400/40"
-									aria-label={`Read ${post.title}`}>
-									<article className="flex h-full flex-col">
-										<div className="relative aspect-16/10 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
-											<Image
-												src={post.image_url || FALLBACK_IMAGE}
-												alt=""
-												fill
-												sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-												className="object-cover transition duration-500 group-hover:scale-105"
-											/>
-										</div>
+						{/* 2. Header */}
+						<div className="blog-header-wrap">
+							<div>
+								<p className="blog-label">Articles & Insights</p>
+								<h1 className="blog-heading">Engineering Field Notes</h1>
+								<p className="blog-subheading">
+									Automated technical deep-dives, architecture notes, and
+									practical software analysis built from current engineering
+									signals.
+								</p>
+							</div>
+						</div>
 
-										<div className="flex flex-1 flex-col p-6">
-											<div className="mb-4 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-												<span className="inline-flex items-center gap-2">
-													<Calendar
-														aria-hidden="true"
-														className="h-3.5 w-3.5"
-													/>
-													{formatDate(publishedDate)}
-												</span>
-												{post.author_name && <span>{post.author_name}</span>}
-											</div>
+						{/* 3. Grid / Empty State */}
+						{articles.length === 0 ? (
+							<div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-16 text-center shadow-sm dark:border-white/10 dark:bg-white/3">
+								<BookOpen
+									aria-hidden="true"
+									className="mx-auto mb-4 h-8 w-8 text-slate-400 dark:text-slate-500"
+								/>
+								<h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+									No articles published yet
+								</h2>
+								<p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-400">
+									The daily automation is ready to publish the next technical
+									article once the cron endpoint runs.
+								</p>
+							</div>
+						) : (
+							<div className="blog-grid">
+								{articles.map((post) => {
+									const href = `/blog/${post.slug}`;
+									const publishedDate = post.published_at ?? post.updated_at;
 
-											<h2 className="text-xl font-bold leading-snug tracking-tight text-slate-950 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-												{post.title}
-											</h2>
-
-											{post.excerpt && (
-												<p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-													{post.excerpt}
-												</p>
-											)}
-
-											<div className="mt-auto flex items-end justify-between gap-4 pt-6">
-												<div className="flex flex-wrap gap-2">
-													{post.tags?.slice(0, 3).map((tag) => (
-														<span
-															key={tag}
-															className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-600 dark:border-white/10 dark:bg-white/4 dark:text-slate-300">
-															{tag}
-														</span>
-													))}
-												</div>
-												<ArrowUpRight
-													aria-hidden="true"
-													className="h-5 w-5 shrink-0 text-slate-400 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400"
+									return (
+										<Link
+											key={post.id}
+											href={href}
+											className="blog-card focus:outline-none"
+											aria-label={`Read ${post.title}`}>
+											<div className="blog-card-image-wrap">
+												<Image
+													src={post.image_url || FALLBACK_IMAGE}
+													alt=""
+													fill
+													sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+													className="object-cover transition duration-500 hover:scale-105"
 												/>
 											</div>
-										</div>
-									</article>
-								</Link>
-							);
-						})}
-					</div>
-				)}
-			</section>
 
-			{/* 2. Added Global Utility Components at the bottom */}
-			{/* Fixed Footer */}
-			<div className="fixed bottom-0 left-0 w-full z-50">
+											<div className="blog-card-meta">
+												<Calendar size={14} aria-hidden="true" />
+												{formatDate(publishedDate)}
+												{post.author_name && (
+													<span className="ml-2">• {post.author_name}</span>
+												)}
+											</div>
+
+											<h2 className="blog-card-title">{post.title}</h2>
+
+											{post.excerpt && (
+												<p className="blog-card-desc">{post.excerpt}</p>
+											)}
+
+											<div className="blog-tags">
+												{post.tags?.slice(0, 3).map((tag) => (
+													<span key={tag} className="blog-tag">
+														{tag}
+													</span>
+												))}
+											</div>
+										</Link>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				</section>
+			</main>
+
+			{/* Global Utility Components */}
+			<div className="mt-auto relative z-20">
 				<Footer />
 			</div>
 
-			{/* Go To Top Button */}
 			<GoToTopButton />
-
-			{/* AI Assistant */}
 			<AIChatWidget />
-
-			{/* Theme Toggle */}
 			<ThemeToggle />
-		</main>
+		</div>
 	);
 }
