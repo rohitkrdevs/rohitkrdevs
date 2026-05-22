@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import Parser from "rss-parser";
 import slugify from "slugify";
+import { createBlogCoverDataUrl } from "@/lib/blog-cover";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -113,13 +114,6 @@ const RSS_SOURCES: RssSource[] = [
 		url: "https://hnrss.org/jobs",
 		tags: ["Career", "Jobs", "Hacker News"],
 	},
-];
-
-const TECH_COVERS = [
-	"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
-	"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
-	"https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80",
-	"https://images.unsplash.com/photo-1555949963-aa79dcee57d5?auto=format&fit=crop&w=1200&q=80",
 ];
 
 type RssFeedFields = {
@@ -590,15 +584,20 @@ export async function GET(request: NextRequest) {
 		const draft = parseBlogDraft(rawContent);
 		const now = new Date().toISOString();
 		const origin = siteOrigin(request);
-		const coverIndex =
-			Math.abs(slug.length + sourceTitle.length) % TECH_COVERS.length;
+		const imageUrl = createBlogCoverDataUrl({
+			title: draft.title,
+			tags: source.tags,
+			keywords: draft.seo_keywords,
+			sourceLabel: source.label,
+			seed: slug,
+		});
 
 		const blogRow: BlogInsert = {
 			...draft,
 			slug,
 			content_format: "html",
 			canonical_url: `${origin}/blog/${slug}`,
-			image_url: TECH_COVERS[coverIndex],
+			image_url: imageUrl,
 			tags: source.tags,
 			author_name: "Rohit Kumar",
 			author_avatar: null,

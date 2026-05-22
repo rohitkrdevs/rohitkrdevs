@@ -4,6 +4,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { ArrowLeft, Calendar, User } from "lucide-react";
+import {
+	resolveBlogCoverUrl,
+	shouldUnoptimizeBlogCover,
+} from "@/lib/blog-cover";
 
 // Global components
 import Footer from "@/components/Footer";
@@ -37,9 +41,6 @@ type BlogPost = {
 	tags: string[] | null;
 	status: string | null;
 };
-
-const FALLBACK_IMAGE =
-	"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80";
 
 function getSupabaseClient() {
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -99,6 +100,10 @@ export async function generateMetadata({
 
 	const title = post.seo_title || post.title;
 	const description = post.seo_description || post.excerpt || "";
+	const metadataImage =
+		post.image_url && !post.image_url.startsWith("data:")
+			? [{ url: post.image_url }]
+			: undefined;
 
 	return {
 		title,
@@ -113,7 +118,7 @@ export async function generateMetadata({
 			title,
 			description,
 			type: "article",
-			images: post.image_url ? [{ url: post.image_url }] : undefined,
+			images: metadataImage,
 			publishedTime: post.published_at || undefined,
 			modifiedTime: post.updated_at || undefined,
 			authors: post.author_name ? [post.author_name] : undefined,
@@ -130,6 +135,13 @@ export default async function BlogPostPage({ params }: PageProps) {
 	}
 
 	const publishedDate = post.published_at ?? post.updated_at;
+	const coverUrl = resolveBlogCoverUrl({
+		imageUrl: post.image_url,
+		title: post.title,
+		tags: post.tags,
+		keywords: post.seo_keywords,
+		seed: post.slug,
+	});
 
 	return (
 		<main className="relative z-10 min-h-screen bg-background pt-12 text-foreground transition-colors duration-300 md:pt-32">
@@ -172,10 +184,11 @@ export default async function BlogPostPage({ params }: PageProps) {
 					{/* Hero Image */}
 					<div className="article-hero-img-wrap">
 						<Image
-							src={post.image_url || FALLBACK_IMAGE}
+							src={coverUrl}
 							alt={post.title}
 							fill
 							priority
+							unoptimized={shouldUnoptimizeBlogCover(coverUrl)}
 							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
 							className="object-cover"
 						/>

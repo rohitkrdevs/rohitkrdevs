@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { BookOpen, Calendar, ArrowLeft } from "lucide-react";
+import {
+	resolveBlogCoverUrl,
+	shouldUnoptimizeBlogCover,
+} from "@/lib/blog-cover";
 
 // Global components
 import Footer from "@/components/Footer";
@@ -30,9 +34,6 @@ type BlogCard = {
 	tags: string[] | null;
 	author_name: string | null;
 };
-
-const FALLBACK_IMAGE =
-	"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80";
 
 function getSupabaseClient() {
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -135,6 +136,12 @@ export default async function BlogPage() {
 								{articles.map((post) => {
 									const href = `/blog/${post.slug}`;
 									const publishedDate = post.published_at ?? post.updated_at;
+									const coverUrl = resolveBlogCoverUrl({
+										imageUrl: post.image_url,
+										title: post.title,
+										tags: post.tags,
+										seed: post.slug,
+									});
 
 									return (
 										<Link
@@ -144,9 +151,10 @@ export default async function BlogPage() {
 											aria-label={`Read ${post.title}`}>
 											<div className="blog-card-image-wrap">
 												<Image
-													src={post.image_url || FALLBACK_IMAGE}
+													src={coverUrl}
 													alt=""
 													fill
+													unoptimized={shouldUnoptimizeBlogCover(coverUrl)}
 													sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 													className="object-cover transition duration-500 hover:scale-105"
 												/>

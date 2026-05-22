@@ -8,11 +8,6 @@ const nextConfig = {
 				port: "",
 				pathname: "/storage/v1/object/public/**",
 			},
-			// Example: If you use Unsplash placeholders in your DB
-			{
-				protocol: "https",
-				hostname: "images.unsplash.com",
-			},
 		],
 	},
 };
