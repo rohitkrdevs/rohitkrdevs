@@ -82,7 +82,7 @@ export default async function BlogPage() {
 		<div className="relative min-h-screen flex flex-col overflow-hidden bg-background text-foreground transition-colors duration-300">
 			{/* <Navbar /> Uncomment this if you want your standard navbar on the blog page */}
 
-			<main className="relative z-10 pt-12 md:pt-32 flex-1">
+			<main className="relative z-10 pt-12 md:pt-32 flex-1 pb-12">
 				<section className="container section blog-section">
 					{/* Your Custom Ambient Glow */}
 					<div className="blog-glow-position"></div>

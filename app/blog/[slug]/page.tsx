@@ -190,7 +190,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 			</article>
 
 			{/* Global Utility Components */}
-			<div className="fixed bottom-0 left-0 w-full z-50">
+			<div className="mt-auto relative z-20">
 				<Footer />
 			</div>
 

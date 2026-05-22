@@ -8,8 +8,112 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const WIRED_RSS_URL = "https://www.wired.com/feed/rss";
-const RSS_SCAN_LIMIT = 8;
+const RSS_ITEMS_PER_FEED = 3;
+const MAX_CANDIDATES = 36;
+
+type RssSource = {
+	label: string;
+	url: string;
+	tags: string[];
+};
+
+const RSS_SOURCES: RssSource[] = [
+	{
+		label: "DEV Community Web Development",
+		url: "https://dev.to/feed/tag/webdev",
+		tags: ["Web Development", "Frontend", "DEV"],
+	},
+	{
+		label: "DEV Community React",
+		url: "https://dev.to/feed/tag/react",
+		tags: ["React", "Frontend", "JavaScript"],
+	},
+	{
+		label: "Hashnode Frontend",
+		url: "https://hashnode.com/n/frontend/rss",
+		tags: ["Frontend", "Web Development", "Hashnode"],
+	},
+	{
+		label: "Smashing Magazine",
+		url: "https://www.smashingmagazine.com/feed/",
+		tags: ["Frontend", "UX", "Web Design"],
+	},
+	{
+		label: "InfoQ Architecture & Design",
+		url: "https://feed.infoq.com/architecture-design",
+		tags: ["Architecture", "Software Design", "InfoQ"],
+	},
+	{
+		label: "InfoQ Development",
+		url: "https://feed.infoq.com/development",
+		tags: ["Software Engineering", "Backend", "InfoQ"],
+	},
+	{
+		label: "DEV Community Backend",
+		url: "https://dev.to/feed/tag/backend",
+		tags: ["Backend", "APIs", "DEV"],
+	},
+	{
+		label: "DZone Database",
+		url: "http://feeds.dzone.com/database",
+		tags: ["Database", "Backend", "DZone"],
+	},
+	{
+		label: "DEV Community TypeScript",
+		url: "https://dev.to/feed/tag/typescript",
+		tags: ["TypeScript", "JavaScript", "DEV"],
+	},
+	{
+		label: "Hashnode Programming",
+		url: "https://hashnode.com/n/programming/rss",
+		tags: ["Programming", "Software Engineering", "Hashnode"],
+	},
+	{
+		label: "SitePoint JavaScript",
+		url: "https://www.sitepoint.com/javascript/feed/",
+		tags: ["JavaScript", "Frontend", "SitePoint"],
+	},
+	{
+		label: "Hacker News Front Page",
+		url: "https://hnrss.org/frontpage",
+		tags: ["Programming", "Technology", "Hacker News"],
+	},
+	{
+		label: "InfoQ AI, ML & Data Engineering",
+		url: "https://feed.infoq.com/ai-ml-data-eng",
+		tags: ["AI", "Machine Learning", "Data Engineering"],
+	},
+	{
+		label: "Wired Technology",
+		url: "https://www.wired.com/feed/category/gear/latest/rss",
+		tags: ["Technology", "Gear", "Wired"],
+	},
+	{
+		label: "TechRadar Tech News",
+		url: "https://www.techradar.com/rss",
+		tags: ["Technology", "Tech News", "TechRadar"],
+	},
+	{
+		label: "The Verge Tech",
+		url: "https://www.theverge.com/rss/index.xml",
+		tags: ["Technology", "Tech News", "The Verge"],
+	},
+	{
+		label: "DEV Community Career",
+		url: "https://dev.to/feed/tag/career",
+		tags: ["Career", "Software Careers", "DEV"],
+	},
+	{
+		label: "InfoQ Culture & Methods",
+		url: "https://feed.infoq.com/culture-methods",
+		tags: ["DevEx", "Leadership", "Engineering Culture"],
+	},
+	{
+		label: "Hacker News Jobs",
+		url: "https://hnrss.org/jobs",
+		tags: ["Career", "Jobs", "Hacker News"],
+	},
+];
 
 const TECH_COVERS = [
 	"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
@@ -28,6 +132,16 @@ type RssItemFields = {
 	"dc:creator"?: string;
 	content?: string;
 	contentSnippet?: string;
+};
+
+type RssCandidate = {
+	item: RssItemFields & {
+		title?: string;
+		link?: string;
+		summary?: string;
+	};
+	slug: string;
+	source: RssSource;
 };
 
 type BlogHeading = {
@@ -75,6 +189,27 @@ const parser = new Parser<RssFeedFields, RssItemFields>({
 		item: ["author", "creator", "dc:creator", "content", "contentSnippet"],
 	},
 });
+
+async function collectRssCandidates(): Promise<RssCandidate[]> {
+	const settledFeeds = await Promise.allSettled(
+		RSS_SOURCES.map(async (source) => {
+			const feed = await parser.parseURL(source.url);
+
+			return feed.items
+				.filter((item) => item.title && item.link)
+				.slice(0, RSS_ITEMS_PER_FEED)
+				.map((item) => ({
+					item,
+					slug: makeSlug(item.title ?? ""),
+					source,
+				}));
+		}),
+	);
+
+	return settledFeeds
+		.flatMap((result) => (result.status === "fulfilled" ? result.value : []))
+		.slice(0, MAX_CANDIDATES);
+}
 
 function jsonResponse(
 	body: Record<string, unknown>,
@@ -270,7 +405,7 @@ function parseBlogDraft(rawJson: string): BlogDraft {
 	};
 }
 
-function buildPrompt({
+export function buildPrompt({
 	title,
 	description,
 	link,
@@ -281,37 +416,47 @@ function buildPrompt({
 	link: string;
 	creator: string;
 }): string {
-	return `
-You are a senior software architect writing for experienced engineers.
+	return `You are a Principal Software Architect and Technical Writer crafting a deep-dive engineering blog post for an audience of seasoned backend, systems, and architecture engineers (similar to the standard of the Netflix Tech Blog, Stripe Engineering, or Cloudflare Blog).
 
-Source article:
+Source Context:
 - Title: ${JSON.stringify(title)}
 - Summary: ${JSON.stringify(description)}
 - Source URL: ${JSON.stringify(link)}
 - Source author/creator: ${JSON.stringify(creator || "Unknown")}
 
-Return one valid JSON object only. Do not wrap it in markdown fences. Do not add commentary.
+Task: Synthesize the provided source into an original, production-quality technical article. Do not merely summarize the source. Instead, use it as a springboard to discuss architectural patterns, trade-offs, performance implications, scalability constraints, and implementation details.
+
+Output Requirements:
+Return ONE valid JSON object only. Do not wrap it in markdown fences. Do not add conversational filler, preambles, or commentary before or after the JSON.
 
 The JSON object must contain exactly these keys:
 {
-  "title": "string",
-  "excerpt": "string under 155 characters",
-  "content": "semantic HTML string only",
+  "title": "string (A compelling, technically accurate title)",
+  "excerpt": "string (Under 155 characters, summarizing the core technical value proposition)",
+  "content": "string (Semantic HTML only, approx 1000-1500 words)",
   "headings": [{"level": 2, "id": "string", "text": "string"}],
-  "seo_title": "string under 60 characters",
-  "seo_description": "string under 155 characters",
-  "seo_keywords": ["string"]
+  "seo_title": "string (Under 60 characters, optimized for technical search intent)",
+  "seo_description": "string (Under 155 characters)",
+  "seo_keywords": ["string", "string", "string"],
+  "reading_time_minutes": 5
 }
 
-Content requirements:
-- Write an original, production-quality technical blog post inspired by the source.
-- Use pure semantic HTML blocks only: <p>, <h2 id="">, <h3 id="">, <ul>, <ol>, <li>, <pre><code>, <strong>, <em>, <blockquote>.
-- Do not use markdown.
+Content & Tone Guidelines:
+- Tone: Objective, highly technical, pragmatic, and analytical. Avoid marketing fluff, hyperbole, and introductory filler. 
+- Structure: Include a clear introduction (the "why"), a deep dive into the architecture or core concepts, real-world implementation challenges, an objective analysis of trade-offs/edge cases, and a definitive conclusion.
+- Code & Configurations: Include realistic, production-like code snippets, configuration files, or data schemas where relevant to illustrate the concepts.
+
+HTML Formatting Rules:
+- Use pure semantic HTML string format for the "content" value.
+- ABSOLUTELY NO MARKDOWN. Use HTML tags only.
+- Permitted tags: <p>, <h2 id="">, <h3 id="">, <ul>, <ol>, <li>, <pre><code class="language-[type]">, <strong>, <em>, <blockquote>.
+- Every <h2> and <h3> must contain a URL-safe, kebab-case 'id' attribute that perfectly matches the 'id' in the headings array.
+- Escape code samples inside <code> with appropriate HTML entities (e.g., &lt;, &gt;, &amp;).
 - Do not use raw <html>, <body>, <article>, <section>, <img>, <script>, inline styles, event handlers, or nested anchors.
-- Escape code samples inside <code> with HTML entities where needed.
-- Include 4 to 6 h2/h3 headings, each with a stable slug id.
-- The headings array must match the h2/h3 elements in the content exactly.
-`;
+- Ensure the HTML is properly formatted within the JSON string (escape quotes as necessary).
+
+Validation:
+The "headings" array must strictly match the exact text, level (2 or 3), and id of the <h2> and <h3> elements generated in the "content" string.`;
 }
 
 export async function GET(request: NextRequest) {
@@ -343,14 +488,7 @@ export async function GET(request: NextRequest) {
 			},
 		});
 
-		const feed = await parser.parseURL(WIRED_RSS_URL);
-		const candidates = feed.items
-			.filter((item) => item.title && item.link)
-			.slice(0, RSS_SCAN_LIMIT)
-			.map((item) => ({
-				item,
-				slug: makeSlug(item.title ?? ""),
-			}));
+		const candidates = await collectRssCandidates();
 
 		if (candidates.length === 0) {
 			return jsonResponse({ message: "No usable RSS items were found." });
@@ -386,7 +524,7 @@ export async function GET(request: NextRequest) {
 			});
 		}
 
-		const { item, slug } = nextCandidate;
+		const { item, slug, source } = nextCandidate;
 		const sourceTitle = item.title ?? "Recent technology news";
 		const sourceDescription =
 			item.contentSnippet || item.content || item.summary || sourceTitle;
@@ -395,7 +533,7 @@ export async function GET(request: NextRequest) {
 		const prompt = buildPrompt({
 			title: sourceTitle,
 			description: textFromHtml(sourceDescription).slice(0, 1000),
-			link: item.link ?? WIRED_RSS_URL,
+			link: item.link ?? source.url,
 			creator: sourceCreator,
 		});
 
@@ -461,8 +599,8 @@ export async function GET(request: NextRequest) {
 			content_format: "html",
 			canonical_url: `${origin}/blog/${slug}`,
 			image_url: TECH_COVERS[coverIndex],
-			tags: ["Tech News", "Engineering", "AI"],
-			author_name: sourceCreator || "System Automation",
+			tags: source.tags,
+			author_name: "Rohit Kumar",
 			author_avatar: null,
 			status: "published",
 			published_at: now,
@@ -493,7 +631,10 @@ export async function GET(request: NextRequest) {
 
 		return jsonResponse({
 			success: true,
-			source: WIRED_RSS_URL,
+			source: {
+				label: source.label,
+				url: source.url,
+			},
 			post: insertedPost,
 		});
 	} catch (error) {
