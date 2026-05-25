@@ -2,8 +2,12 @@ name: Daily Blog Cron
 
 on:
   schedule:
+    # Runs daily at 2:00 AM UTC
     - cron: "0 2 * * *"
+    # Also run every 12 hours as backup (prevents workflow from being disabled)
+    - cron: "0 */12 * * *"
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -11,9 +15,21 @@ permissions:
 jobs:
   trigger-blog-cron:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
+      - name: Check secrets
+        run: |
+          if [[ -z "${{ secrets.PROD_URL }}" ]]; then
+            echo "❌ ERROR: PROD_URL secret is not set"
+            exit 1
+          fi
+          if [[ -z "${{ secrets.CRON_SECRET }}" ]]; then
+            echo "❌ ERROR: CRON_SECRET secret is not set"
+            exit 1
+          fi
+          echo "✅ All required secrets are configured"
+
       - name: Trigger production blog generator
         env:
           PROD_URL: ${{ secrets.PROD_URL }}
@@ -22,19 +38,42 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ -z "${PROD_URL}" || -z "${CRON_SECRET}" ]]; then
-            echo "Missing PROD_URL or CRON_SECRET repository secret." >&2
-            exit 1
-          fi
+          echo "🚀 Starting blog cron job at $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Target URL: ${PROD_URL}/api/cron"
 
+          # Remove trailing slash
           PROD_URL="${PROD_URL%/}"
 
-          curl \
+          # Make the request
+          RESPONSE=$(curl \
             --fail-with-body \
             --silent \
             --show-error \
-            --retry 3 \
+            --retry 5 \
             --retry-delay 10 \
+            --retry-max-time 60 \
+            --connect-timeout 10 \
+            --max-time 30 \
             --get \
             --data-urlencode "secret=${CRON_SECRET}" \
-            "${PROD_URL}/api/cron"
+            "${PROD_URL}/api/cron" \
+            || echo '{"error":"curl failed"}')
+
+          echo "📝 Response: ${RESPONSE}"
+
+          # Check if response contains error
+          if echo "${RESPONSE}" | grep -q '"error"'; then
+            echo "❌ Blog cron failed"
+            echo "${RESPONSE}" | jq . || echo "${RESPONSE}"
+            exit 1
+          fi
+
+          echo "✅ Blog cron completed successfully"
+          echo "${RESPONSE}" | jq . || echo "${RESPONSE}"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Blog cron job failed!"
+          echo "Check GitHub Actions logs for details"
+          exit 1

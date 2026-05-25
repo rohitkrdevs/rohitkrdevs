@@ -9,7 +9,7 @@ type ChatMessage = {
 };
 
 const SYSTEM_PROMPT = `
-You are Rohit Kumar's Gemini AI assistant on rohitkrdevs.com.
+You are Rohit Kumar's Gemini AI assistant on rohitkrdevs.vercel.app.
 You can help visitors with Rohit's profile, portfolio, skills, projects, contact details, and general questions about technology, learning, coding, careers, current events, or anything else they ask.
 
 Rohit's profile context:
@@ -290,7 +290,8 @@ export async function POST(request: Request) {
 			useGoogleSearch,
 		);
 	} catch (error) {
-		const isTimeout = error instanceof DOMException && error.name === "AbortError";
+		const isTimeout =
+			error instanceof DOMException && error.name === "AbortError";
 
 		return Response.json(
 			{
@@ -312,7 +313,9 @@ export async function POST(request: Request) {
 				messages,
 				false,
 			);
-			const fallbackData: unknown = await fallbackResponse.json().catch(() => null);
+			const fallbackData: unknown = await fallbackResponse
+				.json()
+				.catch(() => null);
 
 			if (fallbackResponse.ok) {
 				return Response.json({

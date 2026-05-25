@@ -261,6 +261,10 @@ function textFromHtml(value: string): string {
 		.trim();
 }
 
+function getRandomItem<T>(array: T[]): T | undefined {
+	return array[Math.floor(Math.random() * array.length)];
+}
+
 function sanitizeHtmlContent(rawHtml: string): string {
 	const allowedTags = new Set([
 		"a",
@@ -508,13 +512,23 @@ export async function GET(request: NextRequest) {
 				.filter(Boolean),
 		);
 
-		const nextCandidate = candidates.find(
+		// Get all unprocessed candidates and pick one randomly
+		const unprocessedCandidates = candidates.filter(
 			(candidate) => !existingSlugs.has(candidate.slug),
 		);
 
-		if (!nextCandidate) {
+		if (unprocessedCandidates.length === 0) {
 			return jsonResponse({
 				message: "All recent RSS items have already been processed.",
+			});
+		}
+
+		// Randomly select from available feeds for better distribution
+		const nextCandidate = getRandomItem(unprocessedCandidates);
+
+		if (!nextCandidate) {
+			return jsonResponse({
+				message: "Failed to select a candidate.",
 			});
 		}
 

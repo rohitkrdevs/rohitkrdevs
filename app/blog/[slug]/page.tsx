@@ -14,6 +14,7 @@ import Footer from "@/components/Footer";
 import GoToTopButton from "@/components/GoToTopButton";
 import AIChatWidget from "@/components/AIChatWidget";
 import ThemeToggle from "@/components/ThemeToggle";
+import ShareButtons from "@/components/ShareButtons";
 
 export const revalidate = 3600;
 
@@ -198,6 +199,13 @@ export default async function BlogPostPage({ params }: PageProps) {
 					<div
 						className="article-content"
 						dangerouslySetInnerHTML={{ __html: post.content || "" }}
+					/>
+
+					{/* Share Buttons */}
+					<ShareButtons
+						title={post.title}
+						excerpt={post.excerpt || ""}
+						url={`https://rohitkrdevs.vercel.app/blog/${post.slug}`}
 					/>
 				</div>
 			</article>
