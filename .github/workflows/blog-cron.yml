@@ -2,10 +2,12 @@ name: Daily Blog Cron
 
 on:
   schedule:
-    # Runs daily at 2:00 AM UTC
-    - cron: "0 2 * * *"
-    # Also run every 12 hours as backup (prevents workflow from being disabled)
-    - cron: "0 */12 * * *"
+    # 12:00 PM IST
+    - cron: "30 6 * * *"
+
+    # 8:00 PM IST
+    - cron: "30 14 * * *"
+
   workflow_dispatch:
   workflow_call:
 
