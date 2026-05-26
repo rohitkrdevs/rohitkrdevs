@@ -10,6 +10,7 @@
 		"postbuild": "next-sitemap"
 	},
 	"dependencies": {
+		"@google/generative-ai": "^0.21.0",
 		"@next/third-parties": "^16.2.6",
 		"@supabase/supabase-js": "^2.106.0",
 		"framer-motion": "^12.38.0",

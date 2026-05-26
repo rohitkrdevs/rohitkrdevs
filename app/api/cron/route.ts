@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import Parser from "rss-parser";
 import slugify from "slugify";
-import { createBlogCoverDataUrl } from "@/lib/blog-cover";
+import { generateBlogFeaturedImage } from "@/lib/gemini-image-generator";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -598,13 +598,16 @@ export async function GET(request: NextRequest) {
 		const draft = parseBlogDraft(rawContent);
 		const now = new Date().toISOString();
 		const origin = siteOrigin(request);
-		const imageUrl = createBlogCoverDataUrl({
+
+		// Generate featured image using Gemini API
+		console.log("Generating featured image with Gemini API for:", draft.title);
+		const imageUrl = await generateBlogFeaturedImage({
 			title: draft.title,
 			tags: source.tags,
 			keywords: draft.seo_keywords,
-			sourceLabel: source.label,
-			seed: slug,
+			description: draft.excerpt || draft.title,
 		});
+		console.log("Featured image generated successfully");
 
 		const blogRow: BlogInsert = {
 			...draft,
