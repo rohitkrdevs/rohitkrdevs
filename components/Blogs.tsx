@@ -5,50 +5,35 @@ import { motion, type Variants } from "framer-motion";
 import { ArrowUpRight, BookOpen, Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-	resolveBlogCoverUrl,
-	shouldUnoptimizeBlogCover,
-} from "@/lib/blog-cover";
-import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
+import { shouldUnoptimizeBlogCover } from "@/lib/blog-cover";
 
-interface BlogPost {
-	id: number;
+interface MediumPost {
+	id: string;
 	title: string;
+	link: string;
+	pubDate: string;
 	excerpt: string;
-	slug: string;
-	image_url: string;
-	published_at: string;
+	coverUrl: string;
 	tags: string[];
+	author: string;
+	content: string;
+	slug: string;
 }
 
 export default function Blogs() {
-	const [posts, setPosts] = useState<BlogPost[]>([]);
+	const [posts, setPosts] = useState<MediumPost[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		async function fetchAutomatedArticles() {
-			const supabase = getSupabaseBrowserClient();
-
-			if (!supabase) {
-				setLoading(false);
-				setPosts([]);
-				return;
-			}
-
+		async function fetchMediumArticles() {
 			try {
-				const { data, error } = await supabase
-					.from("blogs")
-					.select("*")
-					.order("published_at", { ascending: false })
-					.limit(3);
-
-				if (error) {
-					console.error("Supabase Fetch Error:", error.message, error.details);
-					throw error;
+				const response = await fetch("/api/blogs");
+				if (!response.ok) {
+					throw new Error("Failed to fetch blogs from API");
 				}
-
-				if (data) {
-					setPosts(data);
+				const data = await response.json();
+				if (Array.isArray(data)) {
+					setPosts(data.slice(0, 3));
 				}
 			} catch (err) {
 				console.error("Failed to load blog posts:", err);
@@ -58,7 +43,7 @@ export default function Blogs() {
 			}
 		}
 
-		fetchAutomatedArticles();
+		fetchMediumArticles();
 	}, []);
 
 	const containerVariants: Variants = {
@@ -94,10 +79,9 @@ export default function Blogs() {
 						transition={{ duration: 0.5 }}
 						className="max-w-xl">
 						<p className="blog-label">Articles & Insights</p>
-						<h3 className="blog-heading">Recent Technical Writings</h3>
+						<h3 className="blog-heading">Recent Writings</h3>
 						<p className="blog-subheading">
-							Programmatic deep-dives driven by automated real-time engineering
-							trends and search spikes.
+							Technical articles, engineering notes, and software architecture posts shared on Medium.
 						</p>
 					</motion.div>
 
@@ -136,13 +120,6 @@ export default function Blogs() {
 						whileInView="show"
 						viewport={{ once: true, amount: 0.1 }}>
 						{posts.map((post) => {
-							const coverUrl = resolveBlogCoverUrl({
-								imageUrl: post.image_url,
-								title: post.title,
-								tags: post.tags,
-								seed: post.slug,
-							});
-
 							return (
 								<motion.article
 									key={post.id}
@@ -151,10 +128,10 @@ export default function Blogs() {
 									<div className="relative z-10 flex flex-col h-full">
 										<div className="w-full h-48 rounded-xl overflow-hidden mb-4 border border-foreground/5 bg-muted/20 relative">
 											<Image
-												src={coverUrl}
+												src={post.coverUrl}
 												alt={post.title}
 												fill
-												unoptimized={shouldUnoptimizeBlogCover(coverUrl)}
+												unoptimized={shouldUnoptimizeBlogCover(post.coverUrl)}
 												sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 												className="object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-105"
 												loading="lazy"
@@ -164,7 +141,7 @@ export default function Blogs() {
 										<div className="blog-meta-bar">
 											<span className="blog-meta-item">
 												<Calendar size={12} />
-												{new Date(post.published_at).toLocaleDateString("en-US", {
+												{new Date(post.pubDate).toLocaleDateString("en-US", {
 													month: "short",
 													day: "numeric",
 													year: "numeric",
@@ -173,7 +150,9 @@ export default function Blogs() {
 										</div>
 
 										<h4 className="blog-card-title">
-											<Link href={`/blog/${post.slug}`} className="...">
+											<Link
+												href={`/blog/${post.slug}`}
+												className="hover:text-primary transition-colors duration-200">
 												{post.title}
 											</Link>
 										</h4>
@@ -182,7 +161,7 @@ export default function Blogs() {
 
 										<div className="blog-card-footer mt-auto">
 											<div className="blog-tags-wrap">
-												{post.tags?.map((tag) => (
+												{post.tags?.slice(0, 3).map((tag) => (
 													<span key={tag} className="blog-tag">
 														{tag}
 													</span>
@@ -204,8 +183,7 @@ export default function Blogs() {
 							className="mx-auto text-muted-foreground opacity-40 mb-3"
 						/>
 						<p className="text-sm text-muted-foreground">
-							The daily automation scheduler is compiling today&apos;s breakout
-							articles. Check back shortly!
+							No articles found. Check back shortly!
 						</p>
 					</div>
 				)}

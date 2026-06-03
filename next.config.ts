@@ -4,9 +4,15 @@ const nextConfig = {
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "**.supabase.co", // Whitelists your Supabase storage
-				port: "",
-				pathname: "/storage/v1/object/public/**",
+				hostname: "cdn-images-*.medium.com",
+			},
+			{
+				protocol: "https",
+				hostname: "miro.medium.com",
+			},
+			{
+				protocol: "https",
+				hostname: "*.medium.com",
 			},
 		],
 	},

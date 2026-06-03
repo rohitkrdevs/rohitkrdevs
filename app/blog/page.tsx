@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { createClient } from "@supabase/supabase-js";
 import { BookOpen, Calendar, ArrowLeft } from "lucide-react";
-import {
-	resolveBlogCoverUrl,
-	shouldUnoptimizeBlogCover,
-} from "@/lib/blog-cover";
+import { shouldUnoptimizeBlogCover } from "@/lib/blog-cover";
+import { getMediumBlogs } from "@/lib/medium";
 
 // Global components
 import Footer from "@/components/Footer";
@@ -23,34 +20,6 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-type BlogCard = {
-	id: number | string;
-	title: string;
-	slug: string;
-	excerpt: string | null;
-	image_url: string | null;
-	published_at: string | null;
-	updated_at: string | null;
-	tags: string[] | null;
-	author_name: string | null;
-};
-
-function getSupabaseClient() {
-	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-	const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-	if (!supabaseUrl || !supabaseKey) {
-		throw new Error("Missing Supabase public environment variables.");
-	}
-
-	return createClient(supabaseUrl, supabaseKey, {
-		auth: {
-			persistSession: false,
-			autoRefreshToken: false,
-		},
-	});
-}
-
 function formatDate(value: string | null): string {
 	if (!value) {
 		return "Recently";
@@ -64,20 +33,7 @@ function formatDate(value: string | null): string {
 }
 
 export default async function BlogPage() {
-	const supabase = getSupabaseClient();
-	const { data: posts, error } = await supabase
-		.from("blogs")
-		.select(
-			"id, title, slug, excerpt, image_url, published_at, updated_at, tags, author_name",
-		)
-		.eq("status", "published")
-		.order("published_at", { ascending: false });
-
-	if (error) {
-		throw new Error(`Unable to load blog posts: ${error.message}`);
-	}
-
-	const articles = (posts ?? []) as BlogCard[];
+	const articles = await getMediumBlogs();
 
 	return (
 		<div className="relative min-h-screen flex flex-col overflow-hidden bg-background text-foreground transition-colors duration-300">
@@ -89,12 +45,12 @@ export default async function BlogPage() {
 					<div className="blog-glow-position"></div>
 
 					{/* Content Layer */}
-					<div className="blog-route-inner relative z-10">
+					<div className="blog-route-inner container relative z-10 mx-auto px-4">
 						{/* 1. Back Button */}
 						<div className="mb-10">
 							<Link
 								href="/"
-								className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors group">
+								className="article-back-link inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors group">
 								<ArrowLeft
 									size={16}
 									className="transition-transform group-hover:-translate-x-1"
@@ -109,9 +65,8 @@ export default async function BlogPage() {
 								<p className="blog-label">Articles & Insights</p>
 								<h1 className="blog-heading">Engineering Field Notes</h1>
 								<p className="blog-subheading">
-									Automated technical deep-dives, architecture notes, and
-									practical software analysis built from current engineering
-									signals.
+									Technical articles, engineering notes, and software
+									architecture posts shared on Medium.
 								</p>
 							</div>
 						</div>
@@ -127,34 +82,26 @@ export default async function BlogPage() {
 									No articles published yet
 								</h2>
 								<p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-400">
-									The daily automation is ready to publish the next technical
-									article once the cron endpoint runs.
+									Please check back later!
 								</p>
 							</div>
 						) : (
 							<div className="blog-grid">
 								{articles.map((post) => {
-									const href = `/blog/${post.slug}`;
-									const publishedDate = post.published_at ?? post.updated_at;
-									const coverUrl = resolveBlogCoverUrl({
-										imageUrl: post.image_url,
-										title: post.title,
-										tags: post.tags,
-										seed: post.slug,
-									});
+									const publishedDate = post.pubDate;
 
 									return (
 										<Link
 											key={post.id}
-											href={href}
+											href={`/blog/${post.slug}`}
 											className="blog-card focus:outline-none"
 											aria-label={`Read ${post.title}`}>
 											<div className="blog-card-image-wrap">
 												<Image
-													src={coverUrl}
+													src={post.coverUrl}
 													alt=""
 													fill
-													unoptimized={shouldUnoptimizeBlogCover(coverUrl)}
+													unoptimized={shouldUnoptimizeBlogCover(post.coverUrl)}
 													sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 													className="object-cover transition duration-500 hover:scale-105"
 												/>
@@ -163,8 +110,8 @@ export default async function BlogPage() {
 											<div className="blog-card-meta">
 												<Calendar size={14} aria-hidden="true" />
 												{formatDate(publishedDate)}
-												{post.author_name && (
-													<span className="ml-2">• {post.author_name}</span>
+												{post.author && (
+													<span className="ml-2">• {post.author}</span>
 												)}
 											</div>
 

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://rohitkrdevs.vercel.app</loc><lastmod>2026-05-25T18:46:57.594Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://rohitkrdevs.vercel.app/blog</loc><lastmod>2026-05-25T18:46:57.595Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://rohitkrdevs.vercel.app</loc><lastmod>2026-06-03T07:45:44.727Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://rohitkrdevs.vercel.app/blog</loc><lastmod>2026-06-03T07:45:44.727Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://rohitkrdevs.vercel.app/blog/5-years-50-projects-and-a-whole-lot-of-code-my-journey-as-a-full-stack-developer-44be5189b61d</loc><lastmod>2026-06-03T07:45:44.727Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://rohitkrdevs.vercel.app/blog/beyond-the-chatbox-why-autonomous-ai-agents-are-the-next-massive-shift-in-tech-e91ed343f0da</loc><lastmod>2026-06-03T07:45:44.727Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://rohitkrdevs.vercel.app/blog/from-19-024-feet-to-localhost-what-the-worlds-highest-motorable-pass-taught-me-about-coding-89bf2f7719ff</loc><lastmod>2026-06-03T07:45:44.727Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://rohitkrdevs.vercel.app/blog/the-2026-indie-hacker-playbook-shipping-full-stack-saas-for-0-bf8e7e05c90c</loc><lastmod>2026-06-03T07:45:44.727Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

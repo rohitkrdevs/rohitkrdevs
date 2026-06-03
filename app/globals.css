@@ -1970,12 +1970,9 @@
 	border-radius: var(--radius-md);
 	backdrop-filter: blur(14px);
 	-webkit-backdrop-filter: blur(14px);
-	box-shadow:
-		0 1px 2px rgba(15, 23, 42, 0.03),
-		0 10px 30px rgba(15, 23, 42, 0.04);
+	box-shadow: none;
 	transition:
 		transform 0.45s ease,
-		box-shadow 0.45s ease,
 		border-color 0.45s ease;
 }
 
@@ -1994,20 +1991,18 @@
 
 .blog-card:hover {
 	border-color: rgba(203, 213, 225, 1);
-	box-shadow:
-		0 2px 6px rgba(15, 23, 42, 0.04),
-		0 18px 45px rgba(15, 23, 42, 0.06);
+	box-shadow: none;
 }
 
 .dark .blog-card {
 	background: rgba(255, 255, 255, 0.03);
 	border-color: rgba(255, 255, 255, 0.06);
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+	box-shadow: none;
 }
 
 .dark .blog-card:hover {
 	border-color: rgba(59, 130, 246, 0.3);
-	box-shadow: 0 18px 45px rgba(0, 0, 0, 0.34);
+	box-shadow: none;
 }
 
 /* =========================================================
@@ -2403,7 +2398,8 @@
 
 .article-main {
 	position: relative;
-	padding-bottom: 8rem;
+	padding-bottom: 2rem;
+	margin-bottom: 0 !important;
 }
 
 /* Back Link */
@@ -2666,6 +2662,80 @@
 	background-color: transparent;
 	padding: 0;
 	color: inherit;
+}
+
+/* Medium Blog Content CSS Optimizations */
+.article-content img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 1rem;
+	margin-block: 2rem;
+	border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.dark .article-content img {
+	border-color: rgba(255, 255, 255, 0.08);
+}
+
+.article-content figure {
+	margin-block: 2.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.article-content figcaption {
+	font-size: 0.875rem;
+	color: #64748b;
+	margin-top: 0.75rem;
+	text-align: center;
+	font-style: italic;
+}
+
+.dark .article-content figcaption {
+	color: #94a3b8;
+}
+
+.article-content hr {
+	border: 0;
+	height: 1px;
+	background: rgba(15, 23, 42, 0.08);
+	margin-block: 3.5rem;
+}
+
+.dark .article-content hr {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.article-content table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-block: 2.5rem;
+	font-size: 1rem;
+}
+
+.article-content th,
+.article-content td {
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+	text-align: left;
+}
+
+.dark .article-content th,
+.dark .article-content td {
+	border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.article-content th {
+	font-weight: 700;
+	color: #0f172a;
+	background-color: rgba(15, 23, 42, 0.02);
+}
+
+.dark .article-content th {
+	color: #ffffff;
+	background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* =========================================================
