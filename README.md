@@ -1,13 +1,13 @@
 <h1 align="center">Hi 👋, I'm Rohit Kumar</h1>
 
 <h3 align="center">
-  💻 Web Developer | 5+ Years Experience  
+  💻 Frontend & Full-Stack Developer | 6+ Years Experience  
   <br/>
-  🚀 Transitioning into Full Stack (MERN)
+  🚀 Specializing in React, Next.js & TypeScript
 </h3>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?color=0AFFEF&center=true&vCenter=true&lines=5%2B+Years+Web+Development+Experience;PHP+%7C+WordPress+%7C+MySQL;Learning+MERN+Stack;Building+Scalable+Web+Apps" />
+  <img src="https://readme-typing-svg.herokuapp.com?color=0AFFEF&center=true&vCenter=true&lines=6%2B+Years+Web+Development+Experience;React+%7C+Next.js+%7C+TypeScript;PHP+%7C+MySQL+%7C+WordPress;Building+Scalable+Web+Apps" />
 </p>
 
 <p align="center">
@@ -23,43 +23,43 @@
 
 ## 👨‍💻 About Me
 
-- 💼 5+ years experience in **real-world web development**
+- 💼 **6+ years of experience** transitioning from a strong PHP/MySQL foundation to modern frontend architectures.
 - 🌍 Based in **Ranchi, Jharkhand, India**
-- 🧩 Experience across **Healthcare, Media & Research**
-- ⚡ Focused on **Performance • Scalability • Clean UI**
+- 🧩 Experience across **Healthcare, Media, Research**, and crafting detailed, responsive cross-device product showcases.
+- ⚡ Focused on **Performance • Type-Safety • Clean UI • Advanced SEO**
 
 ---
 
 ## 🚀 Current Focus
 
-- 🔭 Working on **MERN Stack Projects**
-- 🌱 Learning **React, Next.js, Node.js, Express, MongoDB**
-- 🧠 Improving **JavaScript & Application Architecture**
+- 🔭 Building scalable, type-safe web applications using **Next.js, React, and TypeScript**.
+- 💡 Engineering seamless real-world business workflows, including **Stripe & Razorpay** integrations.
+- 🌱 Upgrading legacy internal tools into high-performance, modern dashboards.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### 💻 Core Technologies
+### 💻 Modern Frontend (Active Focus)
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=html,css,js,php,mysql,wordpress" />
+  <img src="https://skillicons.dev/icons?i=react,nextjs,ts,js,tailwind,html,css" />
 </p>
 
-### 🚀 MERN (Learning)
+### ⚙️ Backend & Legacy Stack
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=mongodb,express,react,nodejs,nextjs" />
+  <img src="https://skillicons.dev/icons?i=php,mysql,wordpress,nodejs,express,mongodb" />
 </p>
 
 ---
 
-## ⚙️ What I Do
+## ⚡ What I Do
 
 <p align="center">
+  <img src="https://img.shields.io/badge/React_&_Next.js-✔️-61DAFB?style=for-the-badge&logoColor=black"/>
   <img src="https://img.shields.io/badge/Responsive_Design-✔️-green?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/PHP_Development-✔️-blue?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/WordPress-✔️-purple?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/SEO_Optimization-✔️-orange?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/Payment_Integration-✔️-red?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Payment_Integrations-✔️-red?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/SEO_Architecture-✔️-orange?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Internal_Tools_&_Dashboards-✔️-blue?style=for-the-badge"/>
 </p>
 
 ---
@@ -67,7 +67,7 @@
 ## 🧰 Tools & Platforms
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=git,github,postman,bootstrap,tailwind,vscode" />
+  <img src="https://skillicons.dev/icons?i=git,github,vercel,postman,bootstrap,vscode" />
 </p>
 
 ---
@@ -118,5 +118,5 @@
 ## 🎯 Goal
 
 <p align="center">
-  Become a highly skilled <b>Full Stack Developer</b> and build scalable, real-world applications 🚀
+  Leveraging 6+ years of full-stack experience to build robust, modern, and highly scalable web applications 🚀
 </p>
